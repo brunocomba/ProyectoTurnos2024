@@ -1,0 +1,347 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\webservice\\controllers\\administradorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|solutionrelative:webservice\\controllers\\administradorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|c:\\users\\brcom\\source\\repos\\gestiondeturnos\\webservice\\webservice.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|solutionrelative:webservice\\webservice.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\models\\managers\\administradormg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|solutionrelative:models\\managers\\administradormg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CE1DCC69-8EE1-420C-A620-59BE0F98D752}|ModelsTests\\ModelsTests.csproj|c:\\users\\brcom\\source\\repos\\gestiondeturnos\\modelstests\\modelstests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{CE1DCC69-8EE1-420C-A620-59BE0F98D752}|ModelsTests\\ModelsTests.csproj|solutionrelative:modelstests\\modelstests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|c:\\users\\brcom\\source\\repos\\gestiondeturnos\\models\\managers\\turnosmg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|solutionrelative:models\\managers\\turnosmg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\models\\clases\\turno.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|solutionrelative:models\\clases\\turno.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CE1DCC69-8EE1-420C-A620-59BE0F98D752}|ModelsTests\\ModelsTests.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\modelstests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CE1DCC69-8EE1-420C-A620-59BE0F98D752}|ModelsTests\\ModelsTests.csproj|solutionrelative:modelstests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\models\\managers\\elementoscanchamg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|solutionrelative:models\\managers\\elementoscanchamg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\models\\managers\\elementomg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|solutionrelative:models\\managers\\elementomg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\models\\managers\\deportemg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|solutionrelative:models\\managers\\deportemg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\models\\managers\\clientemg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|solutionrelative:models\\managers\\clientemg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\models\\managers\\canchamg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36A59ED2-E8A8-4C7E-8AC3-A878E382F5E7}|Models\\Models.csproj|solutionrelative:models\\managers\\canchamg.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\webservice\\controllers\\turnocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|solutionrelative:webservice\\controllers\\turnocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\webservice\\controllers\\elementoscanchacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|solutionrelative:webservice\\controllers\\elementoscanchacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\webservice\\controllers\\elementocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|solutionrelative:webservice\\controllers\\elementocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\webservice\\controllers\\deportecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|solutionrelative:webservice\\controllers\\deportecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\webservice\\controllers\\clientecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|solutionrelative:webservice\\controllers\\clientecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\webservice\\controllers\\canchacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8717001D-D599-4F3E-B681-DACEA233ACA0}|WebService\\WebService.csproj|solutionrelative:webservice\\controllers\\canchacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 151,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 389,
+          "SelectedChildIndex": 20,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WebService",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\WebService.csproj",
+              "RelativeDocumentMoniker": "WebService\\WebService.csproj",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\WebService.csproj",
+              "RelativeToolTip": "WebService\\WebService.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-08-06T19:41:30.668Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ModelsTests",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\ModelsTests\\ModelsTests.csproj",
+              "RelativeDocumentMoniker": "ModelsTests\\ModelsTests.csproj",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\ModelsTests\\ModelsTests.csproj",
+              "RelativeToolTip": "ModelsTests\\ModelsTests.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-08-06T19:41:24.08Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TurnosMG.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\TurnosMG.cs",
+              "RelativeDocumentMoniker": "Models\\Managers\\TurnosMG.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\TurnosMG.cs",
+              "RelativeToolTip": "Models\\Managers\\TurnosMG.cs",
+              "ViewState": "AQIAAKwAAAAAAAAAAAAqwLwAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T07:18:08.855Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Turno.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Clases\\Turno.cs",
+              "RelativeDocumentMoniker": "Models\\Clases\\Turno.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Clases\\Turno.cs",
+              "RelativeToolTip": "Models\\Clases\\Turno.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACQAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T06:07:40.143Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "TurnoController.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\TurnoController.cs",
+              "RelativeDocumentMoniker": "WebService\\Controllers\\TurnoController.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\TurnoController.cs",
+              "RelativeToolTip": "WebService\\Controllers\\TurnoController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACAAAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T05:58:57.351Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ElementosCanchaController.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\ElementosCanchaController.cs",
+              "RelativeDocumentMoniker": "WebService\\Controllers\\ElementosCanchaController.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\ElementosCanchaController.cs",
+              "RelativeToolTip": "WebService\\Controllers\\ElementosCanchaController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAEsAAAAyAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T05:44:12.749Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ElementoController.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\ElementoController.cs",
+              "RelativeDocumentMoniker": "WebService\\Controllers\\ElementoController.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\ElementoController.cs",
+              "RelativeToolTip": "WebService\\Controllers\\ElementoController.cs",
+              "ViewState": "AQIAAEgAAAAAAAAAAAAAAF0AAAAPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T05:38:11.227Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "DeporteController.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\DeporteController.cs",
+              "RelativeDocumentMoniker": "WebService\\Controllers\\DeporteController.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\DeporteController.cs",
+              "RelativeToolTip": "WebService\\Controllers\\DeporteController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADEAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T05:34:22.286Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ClienteController.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\ClienteController.cs",
+              "RelativeDocumentMoniker": "WebService\\Controllers\\ClienteController.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\ClienteController.cs",
+              "RelativeToolTip": "WebService\\Controllers\\ClienteController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T05:29:09.316Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ElementosCanchaMG.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\ElementosCanchaMG.cs",
+              "RelativeDocumentMoniker": "Models\\Managers\\ElementosCanchaMG.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\ElementosCanchaMG.cs",
+              "RelativeToolTip": "Models\\Managers\\ElementosCanchaMG.cs",
+              "ViewState": "AQIAACgAAAAAAAAAAAAiwFEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T05:20:46.919Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ElementoMG.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\ElementoMG.cs",
+              "RelativeDocumentMoniker": "Models\\Managers\\ElementoMG.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\ElementoMG.cs",
+              "RelativeToolTip": "Models\\Managers\\ElementoMG.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAqwDsAAABSAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T05:19:27.39Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "DeporteMG.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\DeporteMG.cs",
+              "RelativeDocumentMoniker": "Models\\Managers\\DeporteMG.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\DeporteMG.cs",
+              "RelativeToolTip": "Models\\Managers\\DeporteMG.cs",
+              "ViewState": "AQIAABIAAAAAAAAAAAAAADoAAABQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T05:05:43.757Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "CanchaController.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\CanchaController.cs",
+              "RelativeDocumentMoniker": "WebService\\Controllers\\CanchaController.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\CanchaController.cs",
+              "RelativeToolTip": "WebService\\Controllers\\CanchaController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T05:01:44.309Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "CanchaMG.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\CanchaMG.cs",
+              "RelativeDocumentMoniker": "Models\\Managers\\CanchaMG.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\CanchaMG.cs",
+              "RelativeToolTip": "Models\\Managers\\CanchaMG.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAAADkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T04:58:12.339Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ClienteMG.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\ClienteMG.cs",
+              "RelativeDocumentMoniker": "Models\\Managers\\ClienteMG.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\ClienteMG.cs",
+              "RelativeToolTip": "Models\\Managers\\ClienteMG.cs",
+              "ViewState": "AQIAAD8AAAAAAAAAAAAAADsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T04:58:11.882Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AdministradorMG.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\AdministradorMG.cs",
+              "RelativeDocumentMoniker": "Models\\Managers\\AdministradorMG.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Managers\\AdministradorMG.cs",
+              "RelativeToolTip": "Models\\Managers\\AdministradorMG.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAAJAAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T04:45:57.175Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AdministradorController.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\AdministradorController.cs",
+              "RelativeDocumentMoniker": "WebService\\Controllers\\AdministradorController.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\Controllers\\AdministradorController.cs",
+              "RelativeToolTip": "WebService\\Controllers\\AdministradorController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-02T04:35:09.85Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UnitTest1.cs",
+              "DocumentMoniker": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\ModelsTests\\UnitTest1.cs",
+              "RelativeDocumentMoniker": "ModelsTests\\UnitTest1.cs",
+              "ToolTip": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\ModelsTests\\UnitTest1.cs",
+              "RelativeToolTip": "ModelsTests\\UnitTest1.cs",
+              "ViewState": "AQIAADcDAAAAAAAAAAAkwGUDAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-21T20:41:43.372Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 11,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
