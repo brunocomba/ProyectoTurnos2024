@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "wn3h4VI6ebxlCRnA4EFQY9xxOo7k9nVzA3lIMBOAgclmZRtGAPyhIuJIxYcPv6FMvkCpZY512lIIId/hO86t+w==",
+  "dgSpecHash": "GMmcgoM3NMfR7jfxWc8sbfdA4G9g5h9NUxSpNpA7Ypz602BTDAXWxq+vNhxgW6gWFZ4red06GLFcIqzl84+xTg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\WebService.csproj",
+  "projectFilePath": "C:\\Users\\brcom\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\WebService\\WebService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\brcom\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\brcom\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

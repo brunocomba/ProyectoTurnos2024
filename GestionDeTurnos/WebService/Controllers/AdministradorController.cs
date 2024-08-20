@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models.Clases;
+using Models.Clases.DTO;
 using Models.Managers;
 
 namespace WebService.Controllers
@@ -9,12 +10,12 @@ namespace WebService.Controllers
     public class AdministradorController : ControllerBase
     {
         [HttpPost("add")]
-        public async Task<ActionResult<Administrador>> Add(string nombre, string apellido, int dni, DateTime fechaNac, string calle, int alt, string email, string pass, string confirPass)
+        public async Task<ActionResult<Administrador>> Add(AdministradorDTO admDTO)
         {
             string response;
             try
             {
-                response = AdministradorMG.Instancia.Add(nombre, apellido, dni, fechaNac, calle, alt, email, pass, confirPass);
+                response =  AdministradorMG.Instancia.Add(admDTO.Nombre, admDTO.Apellido, admDTO.Dni, admDTO.fechaNacimiento, admDTO.Calle, admDTO.Altura, admDTO.Email, admDTO.Password, admDTO.confirPass);
             }
             catch (Exception ex) 
             {

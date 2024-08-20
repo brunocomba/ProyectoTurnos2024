@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\GestionDeTurnos",
+    "\\GestionDeTurnos\\Models",
+    "\\GestionDeTurnos\\Models\\ConnectionDB",
+    "\\GestionDeTurnos\\WebService",
+    "\\GestionDeTurnos\\WebService\\Controllers"
+  ],
+  "SelectedNode": "\\GestionDeTurnos\\Models\\ConnectionDB\\AppDbContext.cs",
+  "PreviewInSolutionExplorer": false
+}

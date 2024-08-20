@@ -1,0 +1,43 @@
+﻿
+@model IEnumerable<Administrador>
+@{
+    ViewData["Title"] = "Lista de Administradores";
+}
+
+<h1>Lista de Administradores</h1>
+
+<p>
+    <a asp-controller="Administrador" asp-action="Create" class="btn btn-primary">Crear Nuevo</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>DNI</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Calle</th>
+            <th>Altura</th>
+            <th>Email</th>
+            <th>Password</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var admin in Model)
+        {
+            <tr>
+                <td>@admin.Id</td>
+                <td>@admin.Nombre</td>
+                <td>@admin.Apellido</td>
+                <td>@admin.Dni</td>
+                <td>@admin.fechaNacimiento.ToString("dd/MM/yyyy")</td>
+                <td>@admin.Calle</td>
+                <td>@admin.Altura</td>
+                <td>@admin.Email</td>
+                <td>@admin.Password</td>
+            </tr>
+        }
+    </tbody>
+</table>

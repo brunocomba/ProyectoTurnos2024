@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PGXE2yr9T3DGQPboVssPIpeogNmI8RB04s8Fu11Ld+Fi8kNHnTnMdxvYBlZ2jNffaNtXZ/BzgOXr6b8SpANZ/g==",
+  "dgSpecHash": "/yxmT3HEYHBH3Tb3CKTbw3YwCVEJHfB61i8ej12BkHT2tYwDKp+5iQuzwO/GJgorzSqY9fmZWdxsEN7kCPf/2A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Models.csproj",
+  "projectFilePath": "C:\\Users\\brcom\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\brcom\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\brcom\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

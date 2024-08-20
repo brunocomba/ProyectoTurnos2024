@@ -7626,11 +7626,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\WebService.csproj",
+      "projectUniqueName": "C:\\Users\\brcom\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\WebService\\WebService.csproj",
       "projectName": "WebService",
-      "projectPath": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\WebService.csproj",
+      "projectPath": "C:\\Users\\brcom\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\WebService\\WebService.csproj",
       "packagesPath": "C:\\Users\\brcom\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\WebService\\obj\\",
+      "outputPath": "C:\\Users\\brcom\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\WebService\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\brcom\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -7647,8 +7647,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Models.csproj": {
-              "projectPath": "C:\\Users\\brcom\\source\\repos\\GestionDeTurnos\\Models\\Models.csproj"
+            "C:\\Users\\brcom\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj": {
+              "projectPath": "C:\\Users\\brcom\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj"
             }
           }
         }
