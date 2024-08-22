@@ -20,8 +20,7 @@
             <th>Fecha de Nacimiento</th>
             <th>Calle</th>
             <th>Altura</th>
-            <th>Email</th>
-            <th>Password</th>
+
         </tr>
     </thead>
     <tbody>
@@ -35,8 +34,13 @@
                 <td>@admin.fechaNacimiento.ToString("dd/MM/yyyy")</td>
                 <td>@admin.Calle</td>
                 <td>@admin.Altura</td>
-                <td>@admin.Email</td>
-                <td>@admin.Password</td>
+
+
+                <td>
+                    <!-- Botón de actualizar -->
+                    <a href="@Url.Action("Editar", new {idAdmiMod = admin.Id })" class="btn btn-primary">Actualizar</a>
+                </td>
+
             </tr>
         }
     </tbody>

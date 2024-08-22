@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pWSQomGN/FHF4IrU5oA17jo6e6y/crAtqa6AnTvsLfWZj8WcwqGILdt2zgwj1I7c++w6tSgZ9En24zkO61OYrw==",
+  "dgSpecHash": "QdvrgcO5EmYf5T1ach9IywedYDiJ++zBS9QfSf9t8FmE3+8fUa/vWo2zEYqrA+0+ovSjvOzXgHH4h2LS6+HIUw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\brcom\\source\\repos\\clienteGestionDeTurnos\\MVC\\MVC.csproj",
+  "projectFilePath": "C:\\Users\\brcom\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\clienteGestionDeTurnos\\MVC\\MVC.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\brcom\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\brcom\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

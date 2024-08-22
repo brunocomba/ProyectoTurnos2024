@@ -29,18 +29,18 @@ namespace Models.Managers
         private static readonly Validaciones _v = new Validaciones();
 
 
-        public Administrador Buscar(int dni)
+        public Administrador Buscar(int id)
         {
-            if (dni == null)
+            if (id == null)
             {
                 throw new Exception("Todos los campos deben estar completos.");
             }
 
-            var adm = _context.Administradores.FirstOrDefault(a => a.Dni == dni);
+            var adm = _context.Administradores.FirstOrDefault(a => a.Id == id);
 
             if (adm == null)
             {
-                throw new Exception($"No se encontro un administrador registrado con el DNI: {dni}");
+                throw new Exception($"No se encontro un administrador registrado con el ID: {id}");
             }
             return adm;
         }
@@ -48,6 +48,15 @@ namespace Models.Managers
         public List<Administrador> Listado()
         {
             return _context.Administradores.ToList();
+        }
+        private bool ExisteDNI(int dni)
+        {
+            var adm = _context.Administradores.FirstOrDefault(a => a.Dni == dni);
+            if (adm != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         private bool EmailRegistrado(string email)
@@ -135,91 +144,63 @@ namespace Models.Managers
         }
 
 
-        public string UpdateNombres(int dniAdmiMod, string name, string apellido)
+        public string UpdateDatosPerosnales(int idAdmiMod, string name, string apellido, int dni, DateTime fecha, string calle, int alt)
         {
-            if (dniAdmiMod == null ||name == null || apellido == null )
+            if (idAdmiMod.ToString() == null || name == null || apellido == null || dni.ToString() == null || fecha.ToString() == null || calle == null || alt.ToString() == null )
             {
                 throw new Exception("Todos los campos deben estar completos.");
             }
 
-            var admiMod = Buscar(dniAdmiMod);
-
-           
-
-            if (_v.SoloLetras(name) == false || _v.SoloLetras(apellido) == false)
+            if (_v.SoloLetras(name) == false || _v.SoloLetras(apellido) == false || _v.SoloLetras(calle) == false)
             {
-                throw new Exception($"El nombre y/o el apellido no puede contener numeros o caracteres especiales.");
+                throw new Exception($"El nombre, el apellido y/o calle no puede contener numeros o caracteres especiales.");
             }
 
-            /// modificar el objeto
-            admiMod.Nombre = name;
-            admiMod.Apellido = apellido;
-
-            _context.Administradores.Update(admiMod);
-            _context.SaveChanges();
-
-            return $"Modificacion realizada con exito";
-
-        }
-
-
-
-        public string UpdateFechaNacimiento(int dniAdmiMod, DateTime fecha)
-        {
-            if (dniAdmiMod == null || fecha == null)
+            if (_v.SoloNumeros(alt) == false || _v.SoloNumeros(dni) == false)
             {
-                throw new Exception("Todos los campos deben estar completos.");
+                throw new Exception($"La altura y/o el DNI no puede contener letras.");
             }
 
-            var admiMod = Buscar(dniAdmiMod);
+            if (_v.DniCompleto(dni) == false)
+            {
+                throw new Exception($"El DNI ingresado esta incompleto.");
+            }
 
-           
+            if (ExisteDNI(dni) == true)
+            {
+                throw new Exception($"Ya existe un administrador registrado con el DNI: {dni}");
+            }
+
             if (_v.Mayor18(fecha) == false)
             {
                 throw new Exception("Es necesario ser mayor de 18 años");
             }
 
-            /// modificar el objeto
-            admiMod.fechaNacimiento = fecha.Date;
 
-            _context.Administradores.Update(admiMod);
-            _context.SaveChanges();
-
-            return $"Modificacion realizada con exito";
-        }
-
-        
-
-        public string UpdateDireccion(int dniAdmiMod, string calle, int altura)
-        {
-            if (dniAdmiMod == null || calle == null || altura == null)
+            var admiMod = _context.Administradores.FirstOrDefault(a => a.Id == idAdmiMod);
+            if (admiMod == null)
             {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
-
-            var admiMod = Buscar(dniAdmiMod);
-
-      
-
-            if (_v.SoloLetras(calle) == false )
-            {
-                throw new Exception($"La calle no puede contener numeros o caracteres especiales.");
-            }
-
-            if (_v.SoloNumeros(altura) == false)
-            {
-                throw new Exception($"La altura no puede contener letras.");
+                throw new Exception("No se ha encontrado el administrador.");
             }
 
             /// modificar el objeto
+            admiMod.Nombre = name;
+            admiMod.Apellido = apellido;
+            admiMod.Dni = dni;
+            admiMod.fechaNacimiento = fecha;
             admiMod.Calle = calle;
-            admiMod.Altura = altura;
+            admiMod.Altura = alt;
 
             _context.Administradores.Update(admiMod);
             _context.SaveChanges();
 
             return $"Modificacion realizada con exito";
+
         }
+
+
+
+
 
 
 
@@ -272,38 +253,6 @@ namespace Models.Managers
 
             /// modificar el objeto
             admiMod.Password = password;
-
-            _context.Administradores.Update(admiMod);
-            _context.SaveChanges();
-
-            return $"Modificacion realizada con exito";
-        }
-
-        public string UpdateDNI(int dniAdmiMod, int dni)
-        {
-            if (dniAdmiMod == null || dni == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
-            var admiMod = Buscar(dniAdmiMod);
-
-           
-            if (Buscar(dni) != null)
-            {
-                throw new Exception($"Ya existe un administrador registrado con el DNI: {dni}");
-            }
-
-            if (_v.DniCompleto(dni) == false)
-            {
-                throw new Exception($"El DNI ingresado esta incompleto.");
-            }
-            if (_v.SoloNumeros(dni) == false)
-            {
-                throw new Exception("El DNI no puede contener letras.");
-            }
-
-            /// modificar el objeto
-            admiMod.Dni = dni;
 
             _context.Administradores.Update(admiMod);
             _context.SaveChanges();

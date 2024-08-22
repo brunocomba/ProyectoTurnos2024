@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models.Clases;
-using Models.Clases.DTO;
+using Models.DTOs.Administrador; /// Aceceder a las DTOs de Administradores
 using Models.Managers;
 
 namespace WebService.Controllers
@@ -10,12 +10,12 @@ namespace WebService.Controllers
     public class AdministradorController : ControllerBase
     {
         [HttpPost("add")]
-        public async Task<ActionResult<Administrador>> Add(AdministradorDTO admDTO)
+        public async Task<ActionResult<Administrador>> Add(AltaDTO dto)
         {
             string response;
             try
             {
-                response =  AdministradorMG.Instancia.Add(admDTO.Nombre, admDTO.Apellido, admDTO.Dni, admDTO.fechaNacimiento, admDTO.Calle, admDTO.Altura, admDTO.Email, admDTO.Password, admDTO.confirPass);
+                response =  AdministradorMG.Instancia.Add(dto.Nombre, dto.Apellido, dto.Dni, dto.fechaNacimiento, dto.Calle, dto.Altura, dto.Email, dto.Password, dto.confirPass);
             }
             catch (Exception ex) 
             {
@@ -24,28 +24,13 @@ namespace WebService.Controllers
             return Ok(response);
         }
 
-        [HttpPut("update/nombres")]
-        public async Task<ActionResult<Administrador>> UpdateNombres(int dni, string nombre, string apellido)
+        [HttpPut("update/datosPersonales{id}")]
+        public async Task<ActionResult<Administrador>> UpdateNombres(UpdateDatosPersonalesDTO dto, int id)
         {
             string response;
             try
             {
-                response = AdministradorMG.Instancia.UpdateNombres(dni, nombre, apellido);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(response);
-        }
-
-        [HttpPut("update/fechanacimiento")]
-        public async Task<ActionResult<Administrador>> UpdateFechaNacimiento(int dni, DateTime fecha)
-        {
-            string response;
-            try
-            {
-                response = AdministradorMG.Instancia.UpdateFechaNacimiento(dni, fecha);
+                response = AdministradorMG.Instancia.UpdateDatosPerosnales(id, dto.Nombre, dto.Apellido, dto.Dni, dto.fechaNacimiento, dto.Calle, dto.Altura);
             }
             catch (Exception ex)
             {
@@ -55,20 +40,6 @@ namespace WebService.Controllers
         }
 
 
-        [HttpPut("update/direccion")]
-        public async Task<ActionResult<Administrador>> UpdateDireccion(int dni, string calle, int altura)
-        {
-            string response;
-            try
-            {
-                response = AdministradorMG.Instancia.UpdateDireccion(dni, calle, altura);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(response);
-        }
 
 
         [HttpPut("update/usuario")]
@@ -93,21 +64,6 @@ namespace WebService.Controllers
             try
             {
                 response = AdministradorMG.Instancia.UpdatePassword(dni, pass, confirPass);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(response);
-        }
-
-        [HttpPut("update/dni")]
-        public async Task<ActionResult<Administrador>> UpdateDni(int dniMod, int dniNew, string confirPass)
-        {
-            string response;
-            try
-            {
-                response = AdministradorMG.Instancia.UpdateDNI(dniMod, dniNew);
             }
             catch (Exception ex)
             {
@@ -147,7 +103,7 @@ namespace WebService.Controllers
 
         }
 
-        [HttpGet("buscar")]
+        [HttpGet("buscar{dni}")]
         public async Task<ActionResult<IEnumerable<Administrador>>> Buscar(int dni)
         {
             Administrador response;

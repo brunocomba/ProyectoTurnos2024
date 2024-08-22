@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Clases.DTO
+namespace Models.DTOs.Administrador
 {
-    public class AdministradorDTO
+    public class UpdateDatosPersonalesDTO
     {
         public string? Nombre { get; set; }
         public string? Apellido { get; set; }
@@ -14,8 +14,5 @@ namespace Models.Clases.DTO
         public DateTime fechaNacimiento { get; set; }
         public string? Calle { get; set; }
         public int Altura { get; set; }
-        public string? Email { get; set; }
-        public string? Password { get; set; }
-        public string? confirPass { get; set;}
     }
 }

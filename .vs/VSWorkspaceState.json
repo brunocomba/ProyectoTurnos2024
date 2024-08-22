@@ -1,12 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\GestionDeTurnos",
+    "\\clienteGestionDeTurnos",
+    "\\clienteGestionDeTurnos\\MVC",
+    "\\clienteGestionDeTurnos\\MVC\\Controllers",
     "\\GestionDeTurnos\\Models",
     "\\GestionDeTurnos\\Models\\ConnectionDB",
-    "\\GestionDeTurnos\\WebService",
-    "\\GestionDeTurnos\\WebService\\Controllers"
+    "\\GestionDeTurnos\\Models\\Managers"
   ],
-  "SelectedNode": "\\GestionDeTurnos\\Models\\ConnectionDB\\AppDbContext.cs",
+  "SelectedNode": "\\clienteGestionDeTurnos\\MVC\\Controllers\\AdministradorController.cs",
   "PreviewInSolutionExplorer": false
 }
