@@ -29,18 +29,18 @@ namespace Models.Managers
         private static readonly Validaciones _v = new Validaciones();
 
 
-        public Administrador Buscar(int id)
+        public Administrador Buscar(int dni)
         {
-            if (id == null)
+            if (dni == null)
             {
                 throw new Exception("Todos los campos deben estar completos.");
             }
 
-            var adm = _context.Administradores.FirstOrDefault(a => a.Id == id);
+            var adm = _context.Administradores.FirstOrDefault(a => a.Dni == dni);
 
             if (adm == null)
             {
-                throw new Exception($"No se encontro un administrador registrado con el ID: {id}");
+                throw new Exception($"No se encontro un administrador registrado con el ID: {dni}");
             }
             return adm;
         }

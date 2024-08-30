@@ -46,7 +46,7 @@ namespace Models.ConnectionDB
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //var entorno = definirEntorno(); 
-            optionsBuilder.UseSqlServer($"server = br-PC;database=LaCocaWEB;trusted_connection=true;Encrypt=False");
+            optionsBuilder.UseSqlServer($"server = LAPTOP-64KVEN22;database=LaCocaWEB;trusted_connection=true;Encrypt=False");
         }
     }
 }

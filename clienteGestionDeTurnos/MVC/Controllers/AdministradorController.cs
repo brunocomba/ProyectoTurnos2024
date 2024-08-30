@@ -17,22 +17,42 @@ namespace MVC.Controllers
             _httpClient.BaseAddress = new Uri("https://localhost:7147/administradores");
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int dni)
         {
-            var response = await _httpClient.GetAsync("administradores/listado");
-
-            if (response.IsSuccessStatusCode)
+            if (dni != 0 )
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var administradores = JsonConvert.DeserializeObject<IEnumerable<Administrador>>(content);
+                var resp = await _httpClient.GetAsync($"administradores/buscar{dni}");
 
-                return View("Index", administradores);
+                if (resp.IsSuccessStatusCode)
+                {
+                    var content = await resp.Content.ReadAsStringAsync();
+                    var administrador = JsonConvert.DeserializeObject<Administrador>(content);
+
+                    
+
+                    return View("Index", new List<Administrador>(new Administrador[] {administrador} ));
+                }
+
+            }
+            else
+            {
+                var response = await _httpClient.GetAsync("administradores/listado");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var administradores = JsonConvert.DeserializeObject<IEnumerable<Administrador>>(content);
+
+
+                    return View("Index", administradores);
+                }
+           
             }
 
             return View (new List<Administrador>());
         }
 
-
+   
 
         [HttpGet]
         public async Task<IActionResult> Editar(int idAdmiMod)

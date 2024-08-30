@@ -104,7 +104,7 @@ namespace WebService.Controllers
         }
 
         [HttpGet("buscar{dni}")]
-        public async Task<ActionResult<IEnumerable<Administrador>>> Buscar(int dni)
+        public async Task<ActionResult<Administrador>> Buscar(int dni)
         {
             Administrador response;
             try
