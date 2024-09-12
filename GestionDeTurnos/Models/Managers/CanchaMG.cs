@@ -1,148 +1,66 @@
 ﻿using Models.Clases;
 using Models.ConnectionDB;
-using System.Net;
-using System.Runtime.Intrinsics.Arm;
+using Models.DTOs.Cancha;
 
 namespace Models.Managers
 {
-    public class CanchaMG
+    public class CanchaMG : GenericMG<Cancha>
     {
-        private CanchaMG() { }
+        private readonly DeporteMG _deporteManager;
 
-        private static CanchaMG? instance;
-        public static CanchaMG Instancia
+        public CanchaMG(AppDbContext context, DeporteMG deporteManager) : base(context)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new CanchaMG();
-                }
-                return instance;
-            }
+            _deporteManager = deporteManager;
         }
 
-
-        private readonly AppDbContext _context = AppDbContext.Instancia;
-
-        private static readonly Validaciones _v = new Validaciones();
-
-
-        public Cancha Buscar(string nombre)
+        public async Task<string> AddAsync(AltaCanchaDTO dto)
         {
-            if (nombre == null)
+            if (dto.Name == null)
             {
-                throw new Exception("Todos los campos deben estar completos.");
+                throw new Exception("Error: Debe introducir un nombre");
             }
-
-            var nombreMAY = nombre.ToUpper();
-            var cancha = _context.Canchas.FirstOrDefault(c => c.Name == nombreMAY);
-
-            if (cancha == null)
-            {
-                throw new Exception($"No se encontro una cancha registrada con el nombre: {nombre}");
-            }
-            return cancha;
-        }
-        public List<Cancha> Listado()
-        {
-            return _context.Canchas.ToList();
-        }
-
-        public string Add(string nombreDep, string nombre, decimal precio)
-        {
-            if (nombreDep == null || nombre == null || precio == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
-
-            var canchaExist = _context.Canchas.FirstOrDefault(c =>c.Name == nombre); 
-
-            if (canchaExist != null)
-            {
-                throw new Exception($"Ya existe una cancha registrada con el nombre: {nombre}");
-            }
-
-            if (_v.SoloLetras(nombre) == false)
-            {
-                throw new Exception($"El nombre no puede contener numeros o caracteres especiales.");
-            }
-
-            if (_v.SoloNumerosEnPrecio(precio) == false)
-            {
-                throw new Exception("No puede contener letras el precio. ");
-            }
-
-            var dep = DeporteMG.Instancia.Buscar(nombreDep);
+            _v.PrecioMayorDe0(dto.Precio);
+            _v.SoloLetras(dto.Name);
+            _v.SoloNumeros(dto.idDep); _v.SoloNumerosEnPrecio(dto.Precio); 
+            await _v.NombreRegistrado(dto.Name);
+            var deporte = await _deporteManager.GetByIdAsync(dto.idDep); // Buscar el deporte
 
             Cancha cancha = new Cancha();
-            cancha.Deporte = dep; 
-            cancha.Name = nombre.ToUpper(); // poner todo en mayuscula
-            cancha.Precio = precio;
+            {
+                cancha.Deporte = deporte; cancha.Name = dto.Name; cancha.Precio = dto.Precio;
+            }
 
-            _context.Canchas.AddAsync(cancha);
-            _context.SaveChanges();
+            await _context.Canchas.AddAsync(cancha);
+            await _context.SaveChangesAsync();
 
-            return $"Cancha {nombre} agregada con exito";
+            return ("Cancha registrada con éxito");
         }
-
-
-        public string Update(string nameCanchaMod, string nombreDep, string nombre, decimal precio)
+        
+        public async Task<string> Update(UpdateCanchaDTO dto)
         {
-            if (nameCanchaMod == null || nombreDep == null || nombre == null || precio == null)
+            if (dto.Name == null)
             {
-                throw new Exception("Todos los campos deben estar completos.");
+                throw new Exception("Error: Debe introducir un nombre");
             }
 
-            var canchaMod = _context.Canchas.FirstOrDefault(c => c.Name == nombre);
+            _v.SoloLetras(dto.Name);
+            _v.SoloNumeros(dto.idCanchaMod); _v.SoloNumeros(dto.idDep); _v.SoloNumerosEnPrecio(dto.Precio);
+            _v.MayorDe0(dto.idCanchaMod); _v.MayorDe0(dto.idDep); _v.PrecioMayorDe0(dto.Precio);
+            var canchaMod = await _v.IdRegistrado(dto.idCanchaMod);
+            await _v.NombreRegistradoMenosActual(dto.Name, canchaMod.Name);
+            var deporte = await _deporteManager.GetByIdAsync(dto.idDep); // Buscar el deporte
 
-            if (canchaMod == null)
-            {
-                throw new Exception($"No se ha encontrado ninguna cancha registrada con el nombre: {nameCanchaMod}");
-            }
-
-            if (canchaMod.Name != nombre) /// el nombre de la cancha se va a modificar, si pasa eso que verifique si ya existe uno registrado igual al parametro mod 
-            {
-                var nombreIgual = _context.Canchas.FirstOrDefault(c => c.Name == nombre);
-                if (nombreIgual != null)
-                {
-                    throw new Exception($"Ya existe una cancha registrada con el nombre: {nombre}");
-                }
-            }
-
-            if (_v.SoloLetras(nombre) == false)
-            {
-                throw new Exception($"El nombre no puede contener numeros o caracteres especiales.");
-            }
-
-            if (_v.SoloNumerosEnPrecio(precio) == false)
-            {
-                throw new Exception("No puede contener letras el precio. ");
-            }
-
-            var dep = DeporteMG.Instancia.Buscar(nombreDep);
-
-            /// modificar el objeto
-            canchaMod.Deporte = dep;
-            canchaMod.Name = nombre.ToUpper();
-            canchaMod.Precio = precio;
+            // modificar objeto
+            canchaMod.Deporte = deporte; canchaMod.Name = dto.Name; canchaMod.Precio = dto.Precio;
 
             _context.Canchas.Update(canchaMod);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return $"Modificacion realizada con exito";
+            return $"Cliente actualizado con éxito";
+
         }
 
 
-        public string Delete(string nombre)
-        {
-            var cancha = Buscar(nombre);
-
-            _context.Canchas.Remove(cancha);
-            _context.SaveChanges();
-
-            return $"Se ha eliminado la cancha {nombre}";
-        }
 
     }
 }

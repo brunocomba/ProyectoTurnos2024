@@ -1,148 +1,63 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Models.Clases;
-using Models.ConnectionDB;
+﻿using Models.ConnectionDB;
+using Models.DTOs.Deporte; // DTOs de Deporte
 
 namespace Models.Managers
 {
-    public class DeporteMG
+    public class DeporteMG : GenericMG<Deporte>
     {
-        private DeporteMG() { }
-
-        private static DeporteMG? instance;
-        public static DeporteMG Instancia
+        public DeporteMG(AppDbContext context) : base(context)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new DeporteMG();
-                }
-                return instance;
-            }
         }
 
-
-        private readonly AppDbContext _context = AppDbContext.Instancia;
-
-        private static readonly Validaciones _v = new Validaciones();
-
-
-        public Deporte Buscar(string nombre)
+        public async Task<string> AddAsync(AltaDeporteDTO dto)
         {
-            if (nombre == null)
+            if (dto.Name == null)
             {
-                throw new Exception("Todos los campos deben estar completos.");
+                throw new Exception("Error: Debe introducir un nombre");
             }
 
-            var nombreMAY = nombre.ToUpper();
-            var dep = _context.Deportes.FirstOrDefault(a => a.Name == nombreMAY);
-            if (dep == null)
-            {
-                throw new Exception($"No se encontro un deporte registrado con el nombre: {nombre}");
-            }
-
-            return dep;
-        }
-
-        public List<Deporte> Listado()
-        {
-            return _context.Deportes.ToList();
-        }
-
-        public string Add(string nombre, int cantJugadores)
-        {
-            if (nombre == null || cantJugadores == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
-
-            var depExist = _context.Deportes.FirstOrDefaultAsync(d => d.Name == nombre);
-
-            if (depExist != null)
-            {
-                throw new Exception($"Ya existe un deporte registrado con el nombre: {nombre}");
-
-            }
-
-            if (_v.SoloLetras(nombre) == false)
-            {
-                throw new Exception($"El nombre no puede contener numeros o caracteres especiales.");
-            }
-
-            if (_v.SoloNumeros(cantJugadores) == false)
-            {
-                throw new Exception("No puede contener letras la cantidad de jugadores. ");
-            }
+            _v.SoloLetras(dto.Name);
+            _v.SoloNumeros(dto.cantJugadores);
+            _v.MayorDe0(dto.cantJugadores);
+            await _v.NombreRegistrado(dto.Name);
 
             Deporte dep = new Deporte();
-            dep.Name = nombre.ToUpper(); // poner todo en mayuscula
-            dep.cantJugadores = cantJugadores;
+            {
+                dep.Name = dto.Name.ToUpper(); dep.cantJugadores = dto.cantJugadores;
+            }
+            
+            await _context.Deportes.AddAsync(dep);
+            await _context.SaveChangesAsync();
 
-            _context.Deportes.AddAsync(dep);
-            _context.SaveChanges();
+            return $"Deporte registrado con éxito";
 
-            return $"{nombre} agregado con exito";
         }
 
 
-        public string Update(string nameDepMod, string nombre, int cantJugadores)
+        public async Task<string> Update(UpdateDeporteDTO dto)
         {
-            if (nameDepMod == null ||nombre == null || cantJugadores == null)
+            if (dto.Name == null )
             {
-                throw new Exception("Todos los campos deben estar completos.");
+                throw new Exception("Error: Debe introducir un nombre");
             }
 
-            var depMod = Buscar(nameDepMod);
+            _v.MayorDe0(dto.idDepMod); _v.MayorDe0(dto.cantJugadores);
+            _v.SoloNumeros(dto.cantJugadores); _v.SoloNumeros(dto.idDepMod);
+            _v.SoloLetras(dto.Name);
+            var dep = await _v.IdRegistrado(dto.idDepMod);
+            await _v.NombreRegistradoMenosActual(dto.Name, dep.Name);
 
-            if (depMod == null)
-            {
-                throw new Exception($"No se ha encontrado ningun deporte registrado con el nombre: {nameDepMod}");
-            }
+            // Modificar objeto
+            dep.Name = dto.Name.ToUpper(); dep.cantJugadores = dto.cantJugadores;
 
-            if (depMod.Name != nombre) /// el nombre del dep se va a modificar, si pasa eso que verifique si ya existe uno registrado igual al parametro mod 
-            {
-                if (Buscar(nombre) != null)
-                {
-                    throw new Exception($"Ya existe un deporte registrado con el nombre: {nombre}");
-                }
-            }
+            _context.Deportes.Update(dep);
+            await _context.SaveChangesAsync();
 
-            if (_v.SoloLetras(nombre) == false)
-            {
-                throw new Exception($"El nombre no puede contener numeros o caracteres especiales.");
-            }
+            return ("Deporte actualizado con éxito");
 
-            if (_v.SoloNumeros(cantJugadores) == false)
-            {
-                throw new Exception("No puede contener letras la cantidad de jugadores. ");
-            }
-
-            /// modificar el objeto
-            depMod.Name = nombre.ToUpper();
-            depMod.cantJugadores = cantJugadores;
-          
-            _context.Deportes.Update(depMod);
-            _context.SaveChanges();
-
-            return $"Modificacion realizada con exito";
         }
 
 
-        public string Delete(string nombre)
-        {
-            var dep = Buscar(nombre);
-
-            if (dep == null)
-            {
-                throw new Exception($"No se ha encontrado ningun deporte registrado con el nombre: {nombre}");
-
-            }
-
-            _context.Deportes.Remove(dep);
-            _context.SaveChanges();
-
-            return $"Se ha eliminado el deporte {nombre}";
-        }
 
     }
 }

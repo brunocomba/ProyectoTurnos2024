@@ -5,11 +5,11 @@ namespace ModelsTests
 {
     public class Tests
     {
-        [SetUp]
-        public void Setup()
-        {
-            AppDbContext.Instancia.setEntorno("Test");
-        }
+        //[SetUp]
+        //public void Setup()
+        //{
+        //    AppDbContext.Instancia.setEntorno("Test");
+        //}
 
         //// Adminisitradores
         //[Test]

@@ -1,39 +1,33 @@
-﻿using Models.Clases;
+﻿
+using Models.Clases;
 using Models.ConnectionDB;
-using System.Net;
+using Models.DTOs.Turno;
+using System.ComponentModel.DataAnnotations;
 
 namespace Models.Managers
 {
-    public class TurnosMG
+    public class TurnosMG : GenericMG<Turno>
     {
-        private TurnosMG() { }
 
-        private static TurnosMG? instance;
+        private readonly ClienteMG _clienteManager;
+        private readonly CanchaMG _canchaManager;
 
-        public static TurnosMG Instancia
+
+        public TurnosMG(AppDbContext context, ClienteMG clienteManager, CanchaMG canchaManager) : base(context)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new TurnosMG();
-                }
-                return instance;
-            }
+            _clienteManager = clienteManager;
+            _canchaManager = canchaManager;
         }
 
-        private readonly AppDbContext _context = AppDbContext.Instancia;
 
-        private static readonly Validaciones _v = new Validaciones();
-
-        private bool TurnoRegistrado(TimeSpan horario, DateTime fecha, Cancha cancha)
+        private  bool TurnoRegistrado(TimeSpan horario, DateTime fecha, Cancha cancha)
         {
-            var turnos = Listado();
+            var turnos =  _context.Turnos.ToList();
             foreach (var turno in turnos)
             {
                 if (turno.Horario == horario && turno.Fecha.Date == fecha.Date && turno.Cancha == cancha)
                 {
-                    return true;
+                    throw new Exception($"Error: El turno solicitado ya se encuentra registrado.");
                 }
             }
             return false;
@@ -45,7 +39,7 @@ namespace Models.Managers
 
             if (fecha.Date < fechaHoy)
             {
-                return true;
+                throw new Exception("Error: No se puede registrar un turno con una fecha anterior a la actual.");
             }
             return false;
         }
@@ -56,7 +50,7 @@ namespace Models.Managers
 
             if (horario < tiempoActual)
             {
-                return true;
+                throw new Exception("Error: No se puede registrar un turno con un horario anterior a la actual.");
             }
             return false;
 
@@ -69,7 +63,7 @@ namespace Models.Managers
 
             return precioCancha / cantJugadores;
         }
-        
+
         private bool ClienteTieneMismaFechaAndHorario(Turno turnoDado, Cliente cliente)
         {
             var turnos = Listado();
@@ -98,7 +92,7 @@ namespace Models.Managers
         }
         private TimeSpan ConvertirStringEnTimeSpan(string horario)
         {
-            bool conversionExitosa = TimeSpan.TryParse(horario, out  TimeSpan timeSpan);
+            bool conversionExitosa = TimeSpan.TryParse(horario, out TimeSpan timeSpan);
 
             if (conversionExitosa == false)
             {
@@ -125,11 +119,6 @@ namespace Models.Managers
             return turno;
         }
 
-        public List<Turno> Listado()
-        {
-            return _context.Turnos.ToList();
-        }
-
         public List<Turno> TurnosDeUnCliente(int dniCliente)
         {
             if (dniCliente == null)
@@ -140,110 +129,75 @@ namespace Models.Managers
             return _context.Turnos.Where(turno => turno.Cliente.Dni == dniCliente).ToList();
         }
 
-        public string Add(string horario, DateTime fecha, string nameCancha, int dniCliente)
+        public async Task<string> RegistrarAsync(AltaTurnoDTO dto)
         {
-            var formateoHorario = ConvertirStringEnTimeSpan(horario);
+            var formatoHr = ConvertirStringEnTimeSpan(dto.Horario);
+            _v.MayorDe0(dto.idCliente); _v.MayorDe0(dto.idCancha);
 
-            if (horario == null || fecha == null || nameCancha == null || dniCliente == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
-
-            var cancha = CanchaMG.Instancia.Buscar(nameCancha);
-            var cliente = ClienteMG.Instancia.Buscar(dniCliente);
-
-            if (TurnoRegistrado(formateoHorario, fecha, cancha) == true)
-            {
-                throw new Exception($"El turno solicitado ya se encuentra registrado.");
-            }
-
-            if (EsFechaPasada(fecha) == true)
-            {
-                throw new Exception("No se puede registrar un turno con una fecha anterior a la actual.");
-            }
-
-            if (EsHorarioPasado(formateoHorario) == true)
-            {
-                throw new Exception("No se puede registrar un turno con un horario anterior a la actual.");
-            }
-
+            var cancha = await _canchaManager.GetByIdAsync(dto.idCancha);
+            var cliente = await _clienteManager.GetByIdAsync(dto.idCliente);
+            
+            TurnoRegistrado(formatoHr, dto.Fecha, cancha);
+            EsFechaPasada(dto.Fecha);
+            EsHorarioPasado(formatoHr);
 
             Turno turno = new Turno();
-            turno.Horario = formateoHorario;
-            turno.Fecha = fecha.Date;
-            turno.Cliente = cliente;
-            turno.Cancha = cancha;
-
-            _context.Turnos.Add(turno);
-            _context.SaveChanges();
+            {
+                turno.Horario = formatoHr; turno.Fecha = dto.Fecha.Date ;turno.Cliente = cliente; turno.Cancha = cancha;
+            }
+           
+            await _context.Turnos.AddAsync(turno);
+            await _context.SaveChangesAsync();
 
             return $"Turno regitrado con exito.\nDia: {turno.Fecha.Date}\nHorario: {turno.Horario}\nCancha: {turno.Cancha.Name}\nCliente: {turno.Cliente.Nombre} {turno.Cliente.Apellido}\n" +
                 $"Precio por jugador> ${CalcularPrecioPorJugador(cancha)}";
-        }
 
-        public string UpdateDay(int turnoID, DateTime fechaNew)
+        }
+      
+        public async Task<string> UpdateDay(UpdateDayTurnoDTO dto)
         {
-            if (fechaNew == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
+            _v.MayorDe0(dto.idTurnoMod);
+            _v.SoloNumeros(dto.idTurnoMod);
+            var turno = await _v.IdRegistrado(dto.idTurnoMod);
+            EsFechaPasada(dto.fechaNew);
+            TurnoRegistrado(turno.Horario, dto.fechaNew, turno.Cancha);
 
-            var turnoExist = Buscar(turnoID);
+            // modificar fecha
+            turno.Fecha = dto.fechaNew.Date;
 
-            if (EsFechaPasada(fechaNew) == true)
-            {
-                throw new Exception("No se puede registrar un turno con una fecha anterior a la actual.");
-            }
+            _context.Turnos.Update(turno);
+            await _context.SaveChangesAsync();
 
-            if (TurnoRegistrado(turnoExist.Horario, fechaNew, turnoExist.Cancha) == true)
-            {
-                throw new Exception($"El turno solicitado ya se encuentra registrado.");
-            }
-
-
-            // Modificar fecha
-            turnoExist.Fecha = fechaNew.Date;
-
-            _context.Turnos.Update(turnoExist);
-            _context.SaveChanges();
-
-            return $"Modificacion realizada con exito";
+            return ("Turno actualizado con exito");
         }
 
-        public string UdpateHorario(int turnoID, string horario)
+
+        public async Task<string> UpdateHorario(UpdateHorarioDTO dto)
         {
-            if (horario == null)
+            _v.MayorDe0(dto.idTurnoMod);
+            _v.SoloNumeros(dto.idTurnoMod);
+            var turno = await _v.IdRegistrado(dto.idTurnoMod);
+
+            if (dto.Horario == null)
             {
-                throw new Exception("Todos los campos deben estar completos.");
+                throw new Exception("Error: Debe ingresar un horario");
             }
 
-            var formateoHorario = ConvertirStringEnTimeSpan(horario);
-
-            var turnoExist = Buscar(turnoID);
-           
-            if (horario == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
-
-            if (EsHorarioPasado(formateoHorario) == true)
-            {
-                throw new Exception("No se puede registrar un turno con un horario anterior a la actual.");
-            }
-
-            if (TurnoRegistrado(formateoHorario, turnoExist.Fecha, turnoExist.Cancha) == true)
-            {
-                throw new Exception($"El turno solicitado ya se encuentra registrado.");
-            }
-
+            var formatoHr = ConvertirStringEnTimeSpan(dto.Horario);
+            EsHorarioPasado(formatoHr);
+            TurnoRegistrado(formatoHr, turno.Fecha, turno.Cancha);
+            
             // Modificar fecha
-            turnoExist.Horario = formateoHorario;
+            turno.Horario = formatoHr;
 
-            _context.Turnos.Update(turnoExist);
-            _context.SaveChanges();
+            _context.Turnos.Update(turno);
+            await _context.SaveChangesAsync();
 
-            return $"Modificacion realizada con exito";
+            return $"Turno actualizado con exito";
         }
+
+
+        
 
         public string UpdateCliente(int turnoID, int dniCliente)
         {
@@ -255,13 +209,13 @@ namespace Models.Managers
             var turnoExist = Buscar(turnoID);
             var cliente = ClienteMG.Instancia.Buscar(dniCliente);
 
-           
+
             if (ClienteTieneMismaFechaAndHorario(turnoExist, cliente) == true)
             {
                 throw new Exception("El cliente que quieres cambiar ya tiene un turno registrado para el mismo dia y horario.");
             }
-            
-            
+
+
             // Modificar fecha
             turnoExist.Cliente = cliente;
 
@@ -295,15 +249,7 @@ namespace Models.Managers
             return $"Modificacion realizada con exito";
         }
 
-        public string Delete(int turnoID)
-        {
-            var turno = Buscar(turnoID);
-
-            _context.Turnos.Remove(turno);
-            _context.SaveChanges();
-
-            return $"Se ha eliminado el turno con exito.";
-        }
+       
 
 
         public decimal ResultadoEconomicoDelMes(DateTime fechaDelDia)

@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models.Clases;
-using Models.DTOs.Administrador; /// Aceceder a las DTOs de Administradores
+using Models.DTOs.Administrador;
+using Models.DTOs.Filter;
+
+/// Aceceder a las DTOs de Administradores
 using Models.Managers;
 
 namespace WebService.Controllers
@@ -9,83 +12,13 @@ namespace WebService.Controllers
     [Route("administradores")]
     public class AdministradorController : ControllerBase
     {
-        [HttpPost("add")]
-        public async Task<ActionResult<Administrador>> Add(AltaDTO dto)
+        private readonly AdministradorMG _administradorManager;
+
+        public AdministradorController(AdministradorMG administradorManager)
         {
-            string response;
-            try
-            {
-                response =  AdministradorMG.Instancia.Add(dto.Nombre, dto.Apellido, dto.Dni, dto.fechaNacimiento, dto.Calle, dto.Altura, dto.Email, dto.Password, dto.confirPass);
-            }
-            catch (Exception ex) 
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(response);
+            _administradorManager = administradorManager;
         }
 
-        [HttpPut("update/datosPersonales{id}")]
-        public async Task<ActionResult<Administrador>> UpdateNombres(UpdateDatosPersonalesDTO dto, int id)
-        {
-            string response;
-            try
-            {
-                response = AdministradorMG.Instancia.UpdateDatosPerosnales(id, dto.Nombre, dto.Apellido, dto.Dni, dto.fechaNacimiento, dto.Calle, dto.Altura);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(response);
-        }
-
-
-
-
-        [HttpPut("update/usuario")]
-        public async Task<ActionResult<Administrador>> UpdateUsuario(int dni, string email)
-        {
-            string response;
-            try
-            {
-                response = AdministradorMG.Instancia.UdpateUsuario(dni, email);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(response);
-        }
-
-        [HttpPut("update/password")]
-        public async Task<ActionResult<Administrador>> UpdatePass(int dni, string pass, string confirPass)
-        {
-            string response;
-            try
-            {
-                response = AdministradorMG.Instancia.UpdatePassword(dni, pass, confirPass);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(response);
-        }
-
-        [HttpDelete("delete")]
-        public async Task<ActionResult<Administrador>> Delete(int dni)
-        {
-            string response;
-            try
-            {
-                response = AdministradorMG.Instancia.Delete(dni);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(response);
-        }
 
         [HttpGet("listado")]
         public async Task<ActionResult<IEnumerable<Administrador>>> Listado()
@@ -93,30 +26,141 @@ namespace WebService.Controllers
             IEnumerable<Administrador> response;
             try
             {
-                response = AdministradorMG.Instancia.Listado();
+                response = await _administradorManager.GetAllAsync();
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Conflict(ex.Message);
             }
             return Ok(response);
-
         }
 
-        [HttpGet("buscar{dni}")]
-        public async Task<ActionResult<Administrador>> Buscar(int dni)
+
+        [HttpGet("buscar{id}")]
+        public async Task<ActionResult<Administrador>> Buscar(int id)
         {
             Administrador response;
             try
             {
-                response = AdministradorMG.Instancia.Buscar(dni);
+                response = await _administradorManager.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Conflict(ex.Message);
             }
             return Ok(response);
+        }
 
+
+        [HttpGet ("buscarpordni")]
+        public async Task<ActionResult<Administrador>> BuscarPorDni(int dni)
+        {
+            Administrador response;
+            try
+            {
+                response = await _administradorManager.BuscarPorDni(dni);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex.Message);
+            }
+            return Ok(response);
+        }
+
+
+        [HttpGet("filtrarPorNombreOApellido")]
+        public async Task<ActionResult<IEnumerable<Administrador>>> Filtrar(string data)
+        {
+            IEnumerable<Administrador> response;
+            try
+            {
+                response =  await _administradorManager.FiltrarPorNombreOApellido(data);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex.Message);
+            }
+            return Ok(response);
+        }
+
+
+        [HttpPost("add")]
+        public async Task<ActionResult<Administrador>> Add(AltaAdmDTO altaDto)
+        {
+            string response;
+            try
+            {
+                response = await _administradorManager.AddAsync(altaDto);
+            }
+            catch (Exception ex) 
+            {
+                return Conflict(ex.Message);
+            }
+            return Ok(response);
+        }
+
+
+        [HttpPut("update/datospersonales")]
+        public async Task<ActionResult<Administrador>> UpdateNombres(UpdateDatosPersonalesAdmDTO dto)
+        {
+            string response;
+            try
+            {
+                response = await _administradorManager.UpdateDatosPersonales(dto);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex.Message);
+            }
+            return Ok(response);
+        }
+
+
+        [HttpPut("update/email")]
+        public async Task<ActionResult<Administrador>> UpdateUsuario(UpdateEmailAdmDTO dto)
+        {
+            string response;
+            try
+            {
+                response = await _administradorManager.UdpdateEmail(dto);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex.Message);
+            }
+            return Ok(response);
+        }
+
+
+        [HttpPut("update/password")]
+        public async Task<ActionResult<Administrador>> UpdatePass(UpdatePassAdmDTO dto)
+        {
+            string response;
+            try
+            {
+                response = await _administradorManager.UpdatePassword(dto);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex.Message);
+            }
+            return Ok(response);
+        }
+
+
+        [HttpDelete("delete{id}")]
+        public async Task<ActionResult<Administrador>> Delete(int id)
+        {
+            string response;
+            try
+            {
+                response = await _administradorManager.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex.Message);
+            }
+            return Ok(response);
         }
 
     }

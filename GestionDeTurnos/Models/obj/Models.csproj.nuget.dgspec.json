@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tinch\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj": {}
+    "C:\\Users\\Pol\\Documents\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tinch\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj": {
+    "C:\\Users\\Pol\\Documents\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tinch\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj",
+        "projectUniqueName": "C:\\Users\\Pol\\Documents\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj",
         "projectName": "Models",
-        "projectPath": "C:\\Users\\tinch\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj",
-        "packagesPath": "C:\\Users\\tinch\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tinch\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\obj\\",
+        "projectPath": "C:\\Users\\Pol\\Documents\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj",
+        "packagesPath": "C:\\Users\\Pol\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Pol\\Documents\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\tinch\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Pol\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -46,6 +46,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.6, )"
@@ -63,6 +67,14 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[8.0.6, )"
+            },
+            "Microsoft.Extensions.Configuration.FileExtensions": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             }
           },
           "imports": [
@@ -81,7 +93,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

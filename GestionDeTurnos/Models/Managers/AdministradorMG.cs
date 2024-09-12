@@ -1,275 +1,148 @@
 ﻿using Models.ConnectionDB;
 using Models.Clases;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Net;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Models.DTOs.Administrador;
+using Microsoft.EntityFrameworkCore;
+using Models.DTOs.Filter; // DTOs de Adminsitrador
 
 namespace Models.Managers
 {
-    public class AdministradorMG 
+    public class AdministradorMG : GenericMG<Administrador>
     {
-        private AdministradorMG() { }
-
-        private static AdministradorMG? instance;
-
-        public static AdministradorMG Instancia
+        public AdministradorMG(AppDbContext context) : base(context) 
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new AdministradorMG();
-                }
-                return instance;
-            }
         }
 
-        private readonly AppDbContext _context = AppDbContext.Instancia;
-
-        private static readonly Validaciones _v = new Validaciones();
-
-
-        public Administrador Buscar(int dni)
+        public async Task<Administrador> BuscarPorDni(int dni)
         {
-            if (dni == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
+            _v.DniCompleto(dni);
+            _v.SoloNumeros(dni);
+            _v.MayorDe0(dni);
 
-            var adm = _context.Administradores.FirstOrDefault(a => a.Dni == dni);
+            var adm = await _context.Administradores.FirstOrDefaultAsync(a => a.Dni == dni);
 
             if (adm == null)
             {
-                throw new Exception($"No se encontro un administrador registrado con el ID: {dni}");
+                throw new Exception($"No existe un administrador registrado con el DNI: {dni}");
             }
+
             return adm;
         }
 
-        public List<Administrador> Listado()
+
+        public async Task<string> AddAsync(AltaAdmDTO dto)
         {
-            return _context.Administradores.ToList();
-        }
-        private bool ExisteDNI(int dni)
-        {
-            var adm = _context.Administradores.FirstOrDefault(a => a.Dni == dni);
-            if (adm != null)
+            if (string.IsNullOrEmpty(dto.Nombre) || string.IsNullOrEmpty(dto.Apellido) || string.IsNullOrEmpty(dto.Calle) || string.IsNullOrEmpty(dto.Email)
+                || string.IsNullOrEmpty(dto.confirEmail) || string.IsNullOrEmpty(dto.Password) || string.IsNullOrEmpty(dto.confirPass))
             {
-                return true;
-            }
-            return false;
-        }
-
-        private bool EmailRegistrado(string email)
-        {
-            var emailRegistrado = _context.Administradores.FirstOrDefault(a => a.Email == email);
-
-            if (emailRegistrado != null)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public string Add(string name, string apellido, int dni, DateTime fecha, string calle, int alt, string email, string password, string confirPass)
-        {
-            if (name == null || apellido == null || dni == null || fecha == null || calle == null || alt == null || email == null || password == null || confirPass == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
+                throw new Exception("Error: Todos los campos deben estar completos");
             }
 
-            var admExist = _context.Administradores.FirstOrDefault(a => a.Dni == dni);
-
-            if (admExist != null)
+            _v.MayorDe0(dto.Altura); _v.MayorDe0(dto.Dni); 
+            await _v.DniRegistrado(dto.Dni);
+            _v.SoloLetras(dto.Nombre); _v.SoloLetras(dto.Apellido); _v.SoloLetras(dto.Calle);
+            _v.SoloNumeros(dto.Dni); _v.SoloNumeros(dto.Altura);
+            _v.DniCompleto(dto.Dni);
+            _v.Mayor18(dto.fechaNacimiento);
+            await _v.EmailRegistrado(dto.Email);
+            _v.CumpleRequisitosEmail(dto.Email);
+            _v.ConfirmarEmail(dto.Email, dto.confirEmail);
+            _v.CumpleRequisitosPass(dto.Password);
+            _v.ConfirmarPass(dto.Password, dto.confirPass);
+           
+            var adm = new Administrador();
             {
-                throw new Exception($"Ya existe un administador registrado con el DNI: {dni}");
+                adm.Nombre = dto.Nombre;  adm.Apellido = dto.Apellido; adm.Calle = dto.Calle; adm.Altura = dto.Altura;  adm.Dni = dto.Dni;
+                adm.fechaNacimiento = dto.fechaNacimiento.Date; adm.Email = dto.Email; adm.Password = dto.Password;
             }
 
+            await _context.Administradores.AddAsync(adm);
+            await _context.SaveChangesAsync();
 
-            if (EmailRegistrado(email) == true)
-            {
-                throw new Exception($"Ya existe un administrador registrado con el E-Mail: {email}");
-            }
-
-            if (_v.SoloLetras(name) == false || _v.SoloLetras(calle) == false || _v.SoloLetras(apellido) == false)
-            {
-                throw new Exception($"El nombre, apellido y/o la calle no puede contener numeros o caracteres especiales.");
-            }
-
-            if (_v.SoloNumeros(dni) == false || _v.SoloNumeros(alt) == false)
-            {
-                throw new Exception($"El DNI y/o la altura no puede contener letras.");
-            }
-
-            if (_v.DniCompleto(dni) == false)
-            {
-                throw new Exception($"El DNI ingresado esta incompleto.");
-            }
-
-            if (_v.CumpleRequisitosEmail(email) == false)
-            {
-                throw new Exception("El email ingresado esta en un formato incorrecto.");
-            }
-
-            if (_v.CumpleRequisitosPass(password) == false)
-            {
-                throw new Exception("La contraseña debe contener al menos una mayuscula y un numero.");
-            }
-
-            if (_v.ConfirmarPass(password, confirPass) == false)
-            {
-                throw new Exception("Las contraseñas ingresadas no coinciden.");
-            }
-
-            if (_v.Mayor18(fecha) == false)
-            {
-                throw new Exception("Es necesario ser mayor de 18 años");
-
-            }
-
-            Administrador adm = new Administrador();
-            {
-                adm.Nombre = name;
-                adm.Apellido = apellido;
-                adm.Dni = dni;
-                adm.fechaNacimiento = fecha.Date;
-                adm.Calle = calle;
-                adm.Altura = alt;
-                adm.Email = email;
-                adm.Password = password;
-            }
-            _context.Administradores.AddAsync(adm);
-            _context.SaveChangesAsync();
-
-            return $"Administrador {adm.Nombre} {adm.Apellido} creado con exito";
+            return $"Administrador registrado con éxito";
         }
 
 
-        public string UpdateDatosPerosnales(int idAdmiMod, string name, string apellido, int dni, DateTime fecha, string calle, int alt)
+        public async Task<string> UpdateDatosPersonales(UpdateDatosPersonalesAdmDTO dto)
         {
-            if (idAdmiMod.ToString() == null || name == null || apellido == null || dni.ToString() == null || fecha.ToString() == null || calle == null || alt.ToString() == null )
+            if (string.IsNullOrEmpty(dto.Nombre) || string.IsNullOrEmpty(dto.Apellido) || string.IsNullOrEmpty(dto.Calle))
             {
-                throw new Exception("Todos los campos deben estar completos.");
+                throw new Exception("Erorr al actualizar: Todos los campos deben estar completos");
             }
 
-            if (_v.SoloLetras(name) == false || _v.SoloLetras(apellido) == false || _v.SoloLetras(calle) == false)
+            _v.SoloNumeros(dto.idAdmiMod);
+            _v.MayorDe0(dto.Dni); _v.MayorDe0(dto.Altura); _v.MayorDe0(dto.idAdmiMod);
+            var admiMod = await _v.IdRegistrado(dto.idAdmiMod);
+
+            _v.SoloLetras(dto.Nombre); _v.SoloLetras(dto.Apellido); _v.SoloLetras(dto.Calle);
+            _v.SoloNumeros(dto.Dni); _v.SoloNumeros(dto.Altura);
+            _v.DniCompleto(dto.Dni);
+            await _v.DniRegistradoMenosActual(dto.Dni, admiMod.Dni);
+            _v.Mayor18(dto.fechaNacimiento);
+
+            
+            // Modificar objeto
+            admiMod.Nombre = dto.Nombre; admiMod.Apellido = dto.Apellido; admiMod.Dni = dto.Dni;
+            admiMod.Calle = dto.Calle;  admiMod.Altura = dto.Altura; admiMod.fechaNacimiento = dto.fechaNacimiento.Date;
+
+            _context.Administradores.Update(admiMod);   
+            await _context.SaveChangesAsync();
+
+            return $"Administrador actualizado con éxito";
+        }
+
+
+        public async Task<string> UpdatePassword(UpdatePassAdmDTO dto)
+        {
+            if (string.IsNullOrEmpty(dto.passAntigua) || string.IsNullOrEmpty(dto.passNew) || string.IsNullOrEmpty(dto.confirPassNew))
             {
-                throw new Exception($"El nombre, el apellido y/o calle no puede contener numeros o caracteres especiales.");
+                throw new Exception("No se puede actualizar: Todos los campos deben estar completos");
             }
 
-            if (_v.SoloNumeros(alt) == false || _v.SoloNumeros(dni) == false)
-            {
-                throw new Exception($"La altura y/o el DNI no puede contener letras.");
-            }
+            _v.SoloNumeros(dto.idAdmiMod);
+            _v.MayorDe0(dto.idAdmiMod);
+            var admiMod = await _v.IdRegistrado(dto.idAdmiMod); 
 
-            if (_v.DniCompleto(dni) == false)
-            {
-                throw new Exception($"El DNI ingresado esta incompleto.");
-            }
+            _v.PassAnteriorCorrecta(dto.passAntigua, admiMod.Password);
+            _v.PassRegistradaDistinta(dto.passNew, admiMod.Password);
+            _v.CumpleRequisitosPass(dto.passNew);
+            _v.ConfirmarPass(dto.passNew, dto.confirPassNew);
 
-            if (ExisteDNI(dni) == true)
-            {
-                throw new Exception($"Ya existe un administrador registrado con el DNI: {dni}");
-            }
-
-            if (_v.Mayor18(fecha) == false)
-            {
-                throw new Exception("Es necesario ser mayor de 18 años");
-            }
-
-
-            var admiMod = _context.Administradores.FirstOrDefault(a => a.Id == idAdmiMod);
-            if (admiMod == null)
-            {
-                throw new Exception("No se ha encontrado el administrador.");
-            }
-
-            /// modificar el objeto
-            admiMod.Nombre = name;
-            admiMod.Apellido = apellido;
-            admiMod.Dni = dni;
-            admiMod.fechaNacimiento = fecha;
-            admiMod.Calle = calle;
-            admiMod.Altura = alt;
+            // Modificar objeto
+            admiMod.Password = dto.passNew;
 
             _context.Administradores.Update(admiMod);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return $"Modificacion realizada con exito";
-
+            return $"Administrador actualizado con éxito";
         }
 
 
-
-
-
-
-
-        public string UdpateUsuario(int dniAdmiMod, string email)
+        public async Task<string> UdpdateEmail(UpdateEmailAdmDTO dto)
         {
-            if (dniAdmiMod == null || email == null)
+            if (string.IsNullOrEmpty(dto.emailNew))
             {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
-            var admiMod = Buscar(dniAdmiMod);
-          
-
-            if (EmailRegistrado(email) == true)
-            {
-                throw new Exception($"Ya existe un administrador registrado con el E-Mail: {email}");
+                throw new Exception("No se puede actualizar: Todos los campos deben estar completos");
             }
 
-            if (_v.CumpleRequisitosEmail(email) == false)
-            {
-                throw new Exception("El email ingresado esta en un formato incorrecto.");
-            }
+            _v.SoloNumeros(dto.idAdmiMod);
+            _v.MayorDe0(dto.idAdmiMod);
+            var admiMod = await _v.IdRegistrado(dto.idAdmiMod);
 
-            /// modificar el objeto
-            admiMod.Email = email;
+            _v.EmailAnteriorCorrecto(dto.emailAnterior, admiMod.Email);
+            _v.CumpleRequisitosEmail(dto.emailNew);
+            _v.EmailRegistradoDistinto(dto.emailNew, admiMod.Email);
+            await _v.EmailRegistrado(dto.emailNew);
+            _v.ConfirmarEmail(dto.emailNew, dto.confirEmailNew);
+     
+            // Modificar objeto
+            admiMod.Email = dto.emailNew;
 
             _context.Administradores.Update(admiMod);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return $"Modificacion realizada con exito";
+            return $"Administrador actualizado con éxito";
         }
 
-        public string UpdatePassword(int dniAdmiMod, string password, string confirPass)
-        {
-            if (dniAdmiMod == null || password == null || confirPass == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
-            var admiMod = Buscar(dniAdmiMod);
-
-
-            if (_v.CumpleRequisitosPass(password) == false)
-            {
-                throw new Exception("La contraseña debe contener al menos una mayuscula y un numero.");
-            }
-
-            if (_v.ConfirmarPass(password, confirPass) == false)
-            {
-                throw new Exception("Las contraseñas ingresadas no coinciden.");
-            }
-
-            /// modificar el objeto
-            admiMod.Password = password;
-
-            _context.Administradores.Update(admiMod);
-            _context.SaveChanges();
-
-            return $"Modificacion realizada con exito";
-        }
-
-
-        public string Delete(int dni)
-        {
-            var adm = Buscar(dni);
-
-            _context.Administradores.Remove(adm);
-            _context.SaveChanges();
-
-            return $"Se ha eliminado el administrador con DNI {dni}";
-        }
-
+        
     }
 }

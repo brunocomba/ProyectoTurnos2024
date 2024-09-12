@@ -1,7 +1,10 @@
 ﻿
+
+using Models.Interfaces;
+
 namespace Models.Clases
 {
-    public class Administrador 
+    public class Administrador : IConEmailAndPass, IConDni, IConNombreAndApellido
     {
         public int Id { get; set; }
         public string? Nombre { get; set; }
@@ -10,8 +13,8 @@ namespace Models.Clases
         public DateTime fechaNacimiento { get; set; }
         public string? Calle { get; set; }
         public int Altura { get; set; }
-        public string? Email { get; set; }
-        public string? Password { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
 
         //public Administrador(string? nombre, string? apellido, int dni, DateTime FechaNacimiento, string? calle, int altura, string? email, string? pass)
         //{

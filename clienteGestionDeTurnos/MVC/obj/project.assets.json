@@ -5705,19 +5705,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\tinch\\.nuget\\packages\\": {}
+    "C:\\Users\\Pol\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tinch\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\clienteGestionDeTurnos\\MVC\\MVC.csproj",
+      "projectUniqueName": "C:\\Users\\Pol\\Documents\\GitHub\\ProyectoTurnos2024\\clienteGestionDeTurnos\\MVC\\MVC.csproj",
       "projectName": "MVC",
-      "projectPath": "C:\\Users\\tinch\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\clienteGestionDeTurnos\\MVC\\MVC.csproj",
-      "packagesPath": "C:\\Users\\tinch\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tinch\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\clienteGestionDeTurnos\\MVC\\obj\\",
+      "projectPath": "C:\\Users\\Pol\\Documents\\GitHub\\ProyectoTurnos2024\\clienteGestionDeTurnos\\MVC\\MVC.csproj",
+      "packagesPath": "C:\\Users\\Pol\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Pol\\Documents\\GitHub\\ProyectoTurnos2024\\clienteGestionDeTurnos\\MVC\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\tinch\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Pol\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5777,7 +5777,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

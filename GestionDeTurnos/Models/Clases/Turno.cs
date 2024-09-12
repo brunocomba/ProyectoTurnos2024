@@ -2,7 +2,7 @@
 
 namespace Models.Clases
 {
-    public class Turno
+    public class Turno 
     {
         public int Id { get; set; }
         public DateTime Fecha { get; set; }

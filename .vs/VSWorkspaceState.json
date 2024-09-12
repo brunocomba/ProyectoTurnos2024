@@ -2,14 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\clienteGestionDeTurnos",
-    "\\clienteGestionDeTurnos\\MVC",
-    "\\clienteGestionDeTurnos\\MVC\\Controllers",
-    "\\clienteGestionDeTurnos\\MVC\\Views",
-    "\\clienteGestionDeTurnos\\MVC\\Views\\Administrador",
     "\\GestionDeTurnos",
+    "\\GestionDeTurnos\\Models",
+    "\\GestionDeTurnos\\Models\\Managers",
     "\\GestionDeTurnos\\WebService",
     "\\GestionDeTurnos\\WebService\\Controllers"
   ],
-  "SelectedNode": "\\GestionDeTurnos\\WebService\\Controllers\\AdministradorController.cs",
+  "SelectedNode": "\\GestionDeTurnos\\Models\\Managers\\ElementosCanchaMG.cs",
   "PreviewInSolutionExplorer": false
 }

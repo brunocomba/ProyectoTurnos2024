@@ -1,7 +1,10 @@
 ﻿
+
+using Models.Interfaces;
+
 namespace Models.Clases
 {
-    public class Cancha
+    public class Cancha : IConName
     {
         public int Id { get; set; }
         public Deporte? Deporte { get; set; }

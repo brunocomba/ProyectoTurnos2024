@@ -1,208 +1,147 @@
-﻿
+﻿using Microsoft.EntityFrameworkCore;
 using Models.Clases;
 using Models.ConnectionDB;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Models.DTOs.ElementoCancha;
+
 
 namespace Models.Managers
 {
-    public class ElementosCanchaMG
+    public class ElementosCanchaMG : GenericMG<ElementosCancha> 
     {
-        private ElementosCanchaMG() { }
+        private readonly ElementoMG _elementoManager;
+        private readonly CanchaMG _canchaManager;
 
-        private static ElementosCanchaMG? instance;
-        public static ElementosCanchaMG Instancia
+
+        public ElementosCanchaMG(AppDbContext context, ElementoMG elementoManager, CanchaMG canchaManager) : base(context)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ElementosCanchaMG();
-                }
-                return instance;
-            }
+            _elementoManager = elementoManager;
+            _canchaManager = canchaManager;
         }
 
-        private readonly AppDbContext _context = AppDbContext.Instancia;
 
-        private static readonly Validaciones _v = new Validaciones();
-
-
-
-        public ElementosCancha Buscar(string nombreElemento, string nombreCancha)
+        private async Task<ElementosCancha> Buscar(string nombreElemento, string nombreCancha)
         {
             if (nombreElemento == null || nombreCancha == null)
             {
-                throw new Exception("Todos los campos deben estar completos.");
+                throw new Exception("Error: Todos los campos deben estar completos.");
             }
 
-            var elementoMAY = nombreCancha.ToUpper();
-            var canchaMAY = nombreCancha.ToUpper();
 
-            var elementCancha = _context.ElementosCancha.FirstOrDefault(ec => ec.Cancha.Name == canchaMAY && ec.Elemento.Nombre == elementoMAY);
+            var elementCancha = await _context.ElementosCancha.FirstOrDefaultAsync(ec => ec.Cancha.Name == nombreCancha.ToUpper() && ec.Elemento.Name == nombreElemento.ToUpper());
             if (elementCancha == null)
             {
-                throw new Exception($"No se encontro el elemento {elementoMAY} registrado en la cancha {canchaMAY}.");
+                throw new Exception($"Error: No se encontro el elemento {nombreElemento.ToUpper()} registrado en la cancha {nombreCancha.ToUpper()}.");
             }
+
             return elementCancha;
         }
 
-        private bool ExisteAsignacion(Elemento elemento, Cancha cancha)
+
+        private bool ExisteAsignacion(string nombreCancha, string nombreElemento)
         {
-            var busqueda = _context.ElementosCancha.FirstOrDefault(ec => ec.Elemento.Nombre == elemento.Nombre && ec.Cancha.Name == cancha.Name);
+            var busqueda = _context.ElementosCancha.FirstOrDefault(ec => ec.Elemento.Name == nombreElemento && ec.Cancha.Name == nombreCancha);
 
             if (busqueda != null)
             {
-                return true;
+                throw new Exception($"Error: Ya existe el elemento {nombreElemento} en la cancha {nombreCancha}.");
             }
             return false;
         }
-         
+
+
         private bool StockSuficiente(int stock, int cantidad)
         {
             if (cantidad <= stock)
             {
                 return true;
             }
-            return false;
+
+            throw new Exception($"Error: No hay stock suficiente del elemento");
         }
 
 
-        public List<ElementosCancha> Listado()
+        public async Task<string> AddAsync(AltaAsignacionElementoDTO dto)
         {
-            return _context.ElementosCancha.ToList();
-        }
 
-        public string Add(string nameElemento, string nameCancha, int cantidad)
-        {
-            if (nameElemento == null || nameCancha == null || cantidad == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
+            _v.MayorDe0(dto.Cantidad); _v.MayorDe0(dto.idCancha); _v.MayorDe0(dto.idElemento);
+            _v.SoloNumeros(dto.Cantidad); _v.SoloNumeros(dto.idCancha); _v.SoloNumeros(dto.idElemento);
 
-            var element = ElementoMG.Instancia.Buscar(nameElemento);
-            var cancha = CanchaMG.Instancia.Buscar(nameCancha);
+            var cancha = await _canchaManager.GetByIdAsync(dto.idCancha);   
+            var elemento = await _elementoManager.GetByIdAsync(dto.idCancha);
 
-            if (ExisteAsignacion(element, cancha) == true)
-            {
-                throw new Exception($"Ya existe el elemento {element.Nombre} en la cancha {cancha.Name}.");
-            }
-
-            if (_v.SoloNumeros(cantidad) == false)
-            {
-                throw new Exception("No puede contener letras la cantidad. ");
-            }
-
-            if (StockSuficiente(element.Stock, cantidad) == false)
-            {
-                throw new Exception($"No hay stock suficiente del elemento {element.Nombre}.");
-            }
-
+            ExisteAsignacion(cancha.Name, elemento.Name);
+            StockSuficiente(elemento.Stock, dto.Cantidad);
 
             ElementosCancha ec = new ElementosCancha();
-            ec.Elemento = element;
-            ec.Cancha = cancha;
-            ec.Cantidad = cantidad;
+            {
+                ec.Elemento = elemento; ec.Cancha = cancha; ec.Cantidad = dto.Cantidad;
+            }
 
-            _context.ElementosCancha.Add(ec);
+            await _context.ElementosCancha.AddAsync(ec);
+            await _context.SaveChangesAsync();
 
-            // bajar la cantidad en el stock
-            element.Stock = element.Stock - cantidad;
-            _context.Elementos.Update(element);
-
-            _context.SaveChanges();
-
-
-            return $"{element.Nombre} asignado correctamente a la cancha {cancha.Name}";
+            return $"{elemento.Name} asignado correctamente a la cancha {cancha.Name}";
 
         }
 
-        public string AddCantidad(string nameElemento, string nameCancha, int cantidad)
+
+        public async Task<string> AddCantidad(UpdateCantidadAsignacionDTO dto)
         {
-            if (nameElemento == null || nameCancha == null || cantidad == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
+            _v.MayorDe0(dto.Cantidad); _v.MayorDe0(dto.idCancha); _v.MayorDe0(dto.idElemento); _v.MayorDe0(dto.idAsignaMod);
+            _v.SoloNumeros(dto.Cantidad); _v.SoloNumeros(dto.idCancha); _v.SoloNumeros(dto.idElemento); _v.MayorDe0(dto.idAsignaMod);
 
-            var element = ElementoMG.Instancia.Buscar(nameElemento);
-            var cancha = CanchaMG.Instancia.Buscar(nameCancha);
+            var cancha = await _canchaManager.GetByIdAsync(dto.idCancha);
+            var elemento = await _elementoManager.GetByIdAsync(dto.idCancha);
 
-            if (ExisteAsignacion(element, cancha) == false)
-            {
-                throw new Exception($"No existe el elemento {element.Nombre} en la cancha {cancha.Name}.");
-            }
+            ExisteAsignacion(cancha.Name, elemento.Name);
+            StockSuficiente(elemento.Stock, dto.Cantidad);
 
-            if (_v.SoloNumeros(cantidad) == false)
-            {
-                throw new Exception("No puede contener letras la cantidad. ");
-            }
-
-            if (StockSuficiente(element.Stock, cantidad) == false)
-            {
-                throw new Exception($"No hay stock suficiente del elemento {element.Nombre}.");
-            }
-
-            var asig = Buscar(nameElemento, nameCancha);
+            var asig = await Buscar(elemento.Name, cancha.Name);
 
             // sumar cantidad
-            asig.Cantidad = asig.Cantidad + cantidad;
+            asig.Cantidad = asig.Cantidad + dto.Cantidad;
             _context.ElementosCancha.Update(asig);
 
             // bajar la cantidad en el stock
-            element.Stock = element.Stock - cantidad;
-            _context.Elementos.Update(element);
+            elemento.Stock = elemento.Stock - dto.Cantidad;
+            _context.Elementos.Update(elemento);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return $"Cantidad actualizada.\n--{asig.Cantidad}\nStock actual elemento: {element.Stock}";
+            return $"Cantidad actualizada.\n--{asig.Cantidad}\nStock actual elemento: {elemento.Stock}";
+
 
         }
 
-        public string RestarCantidad(string nameElemento, string nameCancha, int cantidad)
+
+        public async Task<string> RestarCantidad(UpdateCantidadAsignacionDTO dto)
         {
-            if (nameElemento == null || nameCancha == null || cantidad == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
+            _v.MayorDe0(dto.Cantidad); _v.MayorDe0(dto.idCancha); _v.MayorDe0(dto.idElemento); _v.MayorDe0(dto.idAsignaMod);
+            _v.SoloNumeros(dto.Cantidad); _v.SoloNumeros(dto.idCancha); _v.SoloNumeros(dto.idElemento); _v.MayorDe0(dto.idAsignaMod);
 
-            var element = ElementoMG.Instancia.Buscar(nameElemento);
-            var cancha = CanchaMG.Instancia.Buscar(nameCancha);
+            var cancha = await _canchaManager.GetByIdAsync(dto.idCancha);
+            var elemento = await _elementoManager.GetByIdAsync(dto.idCancha);
 
-            if (ExisteAsignacion(element, cancha) == false)
-            {
-                throw new Exception($"No existe el elemento {element.Nombre} en la cancha {cancha.Name}.");
-            }
+            ExisteAsignacion(cancha.Name, elemento.Name);
+            StockSuficiente(elemento.Stock, dto.Cantidad);
 
-            if (_v.SoloNumeros(cantidad) == false)
-            {
-                throw new Exception("No puede contener letras la cantidad. ");
-            }
+            var asig = await Buscar(elemento.Name, cancha.Name);
 
-          
-            var asig = Buscar(nameElemento, nameCancha);
-
-            // restar cantidad
-            asig.Cantidad = asig.Cantidad - cantidad;
+            // sumar cantidad
+            asig.Cantidad = asig.Cantidad - dto.Cantidad;
             _context.ElementosCancha.Update(asig);
 
-            // subir la cantidad en el stock
-            element.Stock = element.Stock + cantidad;
-            _context.Elementos.Update(element);
+            // bajar la cantidad en el stock
+            elemento.Stock = elemento.Stock + dto.Cantidad;
+            _context.Elementos.Update(elemento);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return $"Cantidad actualizada.\n--{asig.Cantidad}\nStock actual elemento: {element.Stock}";
+            return $"Cantidad actualizada.\n--{asig.Cantidad}\nStock actual elemento: {elemento.Stock}";
+
+
         }
 
 
-        public string Delete(string nombreElemento, string nombreCancha)
-        {
-            var asig = Buscar(nombreElemento, nombreCancha);
-
-            _context.ElementosCancha.Remove(asig);
-            _context.SaveChanges();
-
-            return $"Se ha eliminado el elemento {nombreElemento} de la cancha {nombreCancha}";
-        }
     }
 }

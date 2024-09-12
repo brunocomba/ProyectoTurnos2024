@@ -1,175 +1,101 @@
 ﻿using Models.Clases;
 using Models.ConnectionDB;
-using System.Runtime.Intrinsics.Arm;
-
+using Models.DTOs.Elemento;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Models.Managers
 {
-    public class ElementoMG
+    public class ElementoMG : GenericMG<Elemento>
     {
-        private ElementoMG() { }
-
-        private static ElementoMG? instance;
-        public static ElementoMG Instancia
+        public ElementoMG(AppDbContext context) : base(context)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ElementoMG();
-                }
-                return instance;
-            }
         }
 
 
-        private readonly AppDbContext _context = AppDbContext.Instancia;
-
-        private static readonly Validaciones _v = new Validaciones();
-
-      
-
-        public Elemento Buscar(string nombre)
+        public async Task<string> AddAsync(AltaElementoDTO dto)
         {
-            if (nombre == null)
+            if (dto.Name == null )
             {
-                throw new Exception("Todos los campos deben estar completos.");
+                throw new Exception("Error: Debe introducir un nombre");
+            }
+            _v.MayorDe0(dto.Stock);
+            _v.SoloNumeros(dto.Stock);
+            _v.SoloLetras(dto.Name);
+            await _v.NombreRegistrado(dto.Name);
+
+            Elemento elemento = new Elemento();
+            {
+                elemento.Name = dto.Name.ToUpper(); elemento.Stock = dto.Stock;
             }
 
-            var nombreMAY = nombre.ToUpper();
-            var element = _context.Elementos.FirstOrDefault(e => e.Nombre == nombreMAY);
-            if (element == null)
-            {
-                throw new Exception($"No se encontro un elemento registrado con el nombre: {nombre}");
-            }
+            await _context.Elementos.AddAsync(elemento);
+            await _context.SaveChangesAsync();
 
-            return element;
-        }
-
-        public List<Elemento> Listado()
-        {
-            return _context.Elementos.ToList();
-        }
-
-        public string Add(string nombre, int stock)
-        {
-            if (nombre == null || stock == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
-
-            var elementExist = _context.Elementos.FirstOrDefault(e => e.Nombre == nombre);
-
-            if (elementExist != null)
-            {
-                throw new Exception($"Ya existe un elemento registrado con el nombre: {nombre}");
-            }
-
-            if (_v.SoloNumeros(stock) == false)
-            {
-                throw new Exception("No puede contener letras el stock. ");
-            }
-
-            Elemento element = new Elemento();
-            element.Nombre = nombre.ToUpper(); // poner todo en mayuscula
-            element.Stock = stock;
-
-            _context.Elementos.AddAsync(element);
-            _context.SaveChanges();
-
-            return $"{nombre} agregado con exito";
-        }
-
-        public string AddStock(string nombre, int stock)
-        {
-            if (nombre == null || stock == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
-            var elementExist = Buscar(nombre);
-
-            if (elementExist == null)
-            {
-                throw new Exception($"No se ha encontrado el elemento {nombre}.");
-            }
-            
-            elementExist.Stock = elementExist.Stock + stock;
-            
-            _context.Elementos.Update(elementExist);
-            _context.SaveChanges();
-
-            return $"Stock actualizado.\n--{elementExist.Stock}";
-
-        }
-
-        public string RestarStock(string nombre, int stock)
-        {
-            if (nombre == null || stock == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
-
-            var elementExist = Buscar(nombre);
-
-            if (elementExist == null)
-            {
-                throw new Exception($"No se ha encontrado el elemento {nombre}.");
-            }
-
-            elementExist.Stock = elementExist.Stock - stock;
-
-            _context.Elementos.Update(elementExist);
-            _context.SaveChanges();
-
-            return $"Stock actualizado.\n--{elementExist.Stock}";
+            return ("Elemento registrado con éxito");
         }
 
 
-        public string UpdateNombre(string nameElementMod, string nombre)
+        public async Task<string> AddStock(UpdateStockElementoDTO dto)
         {
-            if (nameElementMod == null || nombre == null)
+            _v.MayorDe0(dto.Stock); _v.MayorDe0(dto.idElementoMod);
+            _v.SoloNumeros(dto.Stock); _v.SoloNumeros(dto.idElementoMod);
+            var elemento = await _v.IdRegistrado(dto.idElementoMod);
+
+            // agregar stock
+            elemento.Stock = elemento.Stock + dto.Stock;
+
+            _context.Elementos.Update(elemento);
+            await _context.SaveChangesAsync();
+
+            return $"Stock actualizado.\n--{elemento.Stock}";
+        }
+ 
+        
+        public async Task<string> RestarStock(UpdateStockElementoDTO dto)
+        {
+            _v.MayorDe0(dto.Stock); _v.MayorDe0(dto.idElementoMod);
+            _v.SoloNumeros(dto.Stock); _v.SoloNumeros(dto.idElementoMod);
+            var elemento = await _v.IdRegistrado(dto.idElementoMod);
+
+            // restar stock
+
+            if (elemento.Stock - dto.Stock < 0)
             {
-                throw new Exception("Todos los campos deben estar completos.");
+                throw new Exception("Error: El stock no puede quedar en numero negativo");
             }
 
-            var elementoMod = Buscar(nameElementMod);
+            elemento.Stock = elemento.Stock - dto.Stock;
 
-            if (elementoMod == null)
-            {
-                throw new Exception($"No se ha encontrado ningun elemento registrado con el nombre: {nameElementMod}");
-            }
+            _context.Elementos.Update(elemento);
+            await _context.SaveChangesAsync();
 
-            if (elementoMod.Nombre != nombre) /// el nombre del dep se va a modificar, si pasa eso que verifique si ya existe uno registrado igual al parametro mod 
-            {
-                if (Buscar(nombre) != null)
-                {
-                    throw new Exception($"Ya existe un elemento registrado con el nombre: {nombre}");
-                }
-            }
+            return $"Stock actualizado.\n--{elemento.Stock}";
 
-            /// modificar el objeto
-            elementoMod.Nombre = nombre.ToUpper();
-
-            _context.Elementos.Update(elementoMod);
-            _context.SaveChanges();
-
-            return $"Modificacion realizada con exito";
         }
 
 
-        public string Delete(string nombre)
+        public async Task<string> UpdateNombre(UpdateNombreElementoDTO dto)
         {
-            var element = Buscar(nombre);
-
-            if (element == null)
+            if (dto.Name == null)
             {
-                throw new Exception($"No se ha encontrado ningun elemento registrado con el nombre: {nombre}");
-
+                throw new Exception("Error: Debe introducir un nombre");
             }
 
-            _context.Elementos.Remove(element);
-            _context.SaveChanges();
+            _v.SoloLetras(dto.Name);
+            _v.SoloNumeros(dto.idElementoMod);
+            _v.MayorDe0(dto.idElementoMod);
+            var elemento = await _v.IdRegistrado(dto.idElementoMod);
+            await _v.NombreRegistradoMenosActual(dto.Name, elemento.Name);
 
-            return $"Se ha eliminado el elemento {nombre}";
+            // modificar el objeto
+            elemento.Name = dto.Name.ToUpper();
+
+            _context.Elementos.Update(elemento);
+            await _context.SaveChangesAsync();
+
+            return $"Elemento actualizado con éxito";
+
         }
+
+
     }
 }
