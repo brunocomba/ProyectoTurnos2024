@@ -1,4 +1,4 @@
-﻿
+﻿using Microsoft.EntityFrameworkCore;
 using Models.Clases;
 using Models.ConnectionDB;
 using Models.DTOs.Turno;
@@ -7,10 +7,8 @@ namespace Models.Managers
 {
     public class TurnosMG : GenericMG<Turno>
     {
-
         private readonly ClienteMG _clienteManager;
         private readonly CanchaMG _canchaManager;
-
 
         public TurnosMG(AppDbContext context, ClienteMG clienteManager, CanchaMG canchaManager) : base(context)
         {
@@ -18,7 +16,8 @@ namespace Models.Managers
             _canchaManager = canchaManager;
         }
 
-
+        
+        // Metodos privados de verificacion
         private bool TurnoRegistrado(TimeSpan horario, DateTime fecha, Cancha cancha)
         {
             var turnos = _context.Turnos.ToList();
@@ -103,34 +102,8 @@ namespace Models.Managers
             return timeSpan;
         }
 
-        public Turno Buscar(int id)
-        {
-            var turno = _context.Turnos.FirstOrDefault(t => t.Id == id);
-            if (id == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
 
-            if (turno == null)
-            {
-                throw new Exception($"No se encontro ningun turno registrado con el ID: {id}");
-            }
-
-
-            return turno;
-        }
-
-        public List<Turno> TurnosDeUnCliente(int dniCliente)
-        {
-            if (dniCliente == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
-
-         
-            return _context.Turnos.Where(turno => turno.Cliente.Dni == dniCliente).ToList();
-        }
-
+        // METODOS CRUD
         public async Task<string> RegistrarAsync(AltaTurnoDTO dto)
         {
             var formatoHr = ConvertirStringEnTimeSpan(dto.Horario);
@@ -156,8 +129,7 @@ namespace Models.Managers
 
         }
 
-       
-      
+             
         public async Task<string> UpdateDay(UpdateDayTurnoDTO dto)
         {
             _v.MayorDe0(dto.idTurnoMod);
@@ -222,6 +194,7 @@ namespace Models.Managers
 
         }
 
+
         public async Task<string> UpdateCancha(UpdateCanchaDTO dto)
         {
             _v.MayorDe0(dto.idCanchaNew); _v.MayorDe0(dto.idTurnoMod);
@@ -242,49 +215,69 @@ namespace Models.Managers
         }
 
 
-        public async Task<IEnumerable<Turno>> TurnosSemana(DateTime fecha)
+        // Filtrado de turnos
+        public async Task<IEnumerable<Turno>> TurnosSemanaAsync(DateTime fecha)
         {
             // Calcular el inicio de la semana (lunes)
             DateTime inicioSemana = fecha.AddDays(-(int)fecha.DayOfWeek + 1); // -(int)fecha.DayOfWeek nos dac cuantos dias debemos restar para llegar al domingo
                                                                               // +1 para byscar el lunes
 
+
             // Calcular el final de la semana (domingo)
             DateTime finSemana = inicioSemana.AddDays(6);
 
-            // Filtrar los turnos que están en ese rango
-            var turnosDeLaSemana =  _context.Turnos.Where(t => t.Fecha >= inicioSemana && t.Fecha <= finSemana).ToList();
 
+            // Filtrar los turnos que están en ese rango
+            var turnosDeLaSemana = await _context.Turnos.Where(t => t.Fecha >= inicioSemana && t.Fecha <= finSemana).ToListAsync();
             return turnosDeLaSemana;
 
         }
 
-        public async Task<decimal> ResultadoEconomicoMes(DateTime fechaDelDia)
+        public async Task<IEnumerable<Turno>> TurnosDelMesAsync(DateTime fecha)
         {
-            var turnosDelMes
+            int mes = fecha.Month;
+            int año = fecha.Year;
+
+            // Filtrar turnos que coincidan con el mes y año proporcionados
+            var turnosDelMes = await _context.Turnos.Where(t => t.Fecha.Month == mes && t.Fecha.Year == año).ToListAsync();
+
+            return turnosDelMes;
         }
 
-        public decimal ResultadoEconomicoDelMes(DateTime fechaDelDia)
+
+
+        // Resultados economicos
+        public async Task<string> ResultadoEconomicoMes(DateTime fecha)
         {
-            List<Turno> turnosDelMes = new List<Turno>();
+            var turnosDelMes = await TurnosDelMesAsync(fecha);
 
-            var mesFecha = fechaDelDia.Month;
-            var turnos = _context.Turnos.ToList();
-
-            foreach (var turno in turnos)
+            decimal resultado = 0;
+            foreach (var turno in turnosDelMes)
             {
-                if (turno.Fecha.Month == mesFecha && turno.Asistido == Turno.SINO.SI)
+                if (turno.Cancha != null)
                 {
-                    turnosDelMes.Add(turno);
+                    resultado += turno.Cancha.Precio;
                 }
             }
 
-            decimal result = 0;
-            foreach (var t in turnosDelMes)
+            return $"Resultado economico del mes de {fecha.ToString("MMMM")} -- ${resultado}";
+        }
+
+
+        public async Task<string> ResultadoEconomicoSemana(DateTime fecha)
+        {
+            var turnosSemana = await TurnosSemanaAsync(fecha);
+
+            decimal resultado = 0;
+            foreach (var turno in turnosSemana)
             {
-                result = result + t.Cancha.Precio;
+                if (turno.Cancha != null)
+                {
+                    resultado += turno.Cancha.Precio;
+                }
             }
 
-            return result;
+            return $"Resultado economico del mes de {fecha.ToString("MMMM")} -- ${resultado}";
         }
 
 

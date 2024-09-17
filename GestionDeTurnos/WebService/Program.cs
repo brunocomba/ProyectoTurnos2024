@@ -15,8 +15,8 @@ builder.Services.AddTransient<ClienteMG>();
 builder.Services.AddTransient<CanchaMG>();
 builder.Services.AddTransient<DeporteMG>();
 builder.Services.AddTransient<ElementoMG>();
-
-
+builder.Services.AddTransient<ElementosCanchaMG>();
+builder.Services.AddTransient<TurnosMG>();
 
 
 

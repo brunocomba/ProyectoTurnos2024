@@ -5,9 +5,8 @@
     "\\GestionDeTurnos",
     "\\GestionDeTurnos\\Models",
     "\\GestionDeTurnos\\Models\\Managers",
-    "\\GestionDeTurnos\\WebService",
     "\\GestionDeTurnos\\WebService\\Controllers"
   ],
-  "SelectedNode": "\\GestionDeTurnos\\Models\\Managers\\ElementosCanchaMG.cs",
+  "SelectedNode": "\\GestionDeTurnos\\Models\\Managers\\TurnosMG.cs",
   "PreviewInSolutionExplorer": false
 }
