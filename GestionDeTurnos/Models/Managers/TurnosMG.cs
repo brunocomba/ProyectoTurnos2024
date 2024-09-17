@@ -2,7 +2,6 @@
 using Models.Clases;
 using Models.ConnectionDB;
 using Models.DTOs.Turno;
-using System.ComponentModel.DataAnnotations;
 
 namespace Models.Managers
 {
@@ -20,9 +19,9 @@ namespace Models.Managers
         }
 
 
-        private  bool TurnoRegistrado(TimeSpan horario, DateTime fecha, Cancha cancha)
+        private bool TurnoRegistrado(TimeSpan horario, DateTime fecha, Cancha cancha)
         {
-            var turnos =  _context.Turnos.ToList();
+            var turnos = _context.Turnos.ToList();
             foreach (var turno in turnos)
             {
                 if (turno.Horario == horario && turno.Fecha.Date == fecha.Date && turno.Cancha == cancha)
@@ -64,32 +63,34 @@ namespace Models.Managers
             return precioCancha / cantJugadores;
         }
 
-        private bool ClienteTieneMismaFechaAndHorario(Turno turnoDado, Cliente cliente)
+        private bool ClienteConMismaFechaTurno(Turno turnoDado, Cliente cliente)
         {
-            var turnos = Listado();
+            var turnos =  _context.Turnos.ToList();   
             foreach (var turno in turnos)
             {
                 if (turno.Cliente == cliente && turnoDado.Fecha == turno.Fecha && turnoDado.Horario == turno.Horario)
                 {
-                    return true;
+                    throw new Exception("El cliente que quieres cambiar ya tiene un turno registrado para el mismo dia y horario.");
                 }
             }
             return false;
 
-        }
-        private bool CanchaTieneMismaFechaAndHorario(Turno turnoDado, Cancha cancha)
+        } 
+
+        private bool CanchaConMismaFechaTurno(Turno turnoDado, Cancha cancha)
         {
-            var turnos = Listado();
+            var turnos = _context.Turnos.ToList();
             foreach (var turno in turnos)
             {
                 if (turno.Cancha == cancha && turnoDado.Fecha == turno.Fecha && turnoDado.Horario == turno.Horario)
                 {
-                    return true;
+                    throw new Exception("La cancha que quieres cambiar ya tiene un turno registrado para el mismo dia y horario.");
                 }
             }
             return false;
 
         }
+
         private TimeSpan ConvertirStringEnTimeSpan(string horario)
         {
             bool conversionExitosa = TimeSpan.TryParse(horario, out TimeSpan timeSpan);
@@ -126,6 +127,7 @@ namespace Models.Managers
                 throw new Exception("Todos los campos deben estar completos.");
             }
 
+         
             return _context.Turnos.Where(turno => turno.Cliente.Dni == dniCliente).ToList();
         }
 
@@ -149,10 +151,12 @@ namespace Models.Managers
             await _context.Turnos.AddAsync(turno);
             await _context.SaveChangesAsync();
 
-            return $"Turno regitrado con exito.\nDia: {turno.Fecha.Date}\nHorario: {turno.Horario}\nCancha: {turno.Cancha.Name}\nCliente: {turno.Cliente.Nombre} {turno.Cliente.Apellido}\n" +
+            return $"Turno registrado con exito.\nDia: {turno.Fecha.Date}\nHorario: {turno.Horario}\nCancha: {turno.Cancha.Name}\nCliente: {turno.Cliente.Nombre} {turno.Cliente.Apellido}\n" +
                 $"Precio por jugador> ${CalcularPrecioPorJugador(cancha)}";
 
         }
+
+       
       
         public async Task<string> UpdateDay(UpdateDayTurnoDTO dto)
         {
@@ -172,11 +176,11 @@ namespace Models.Managers
         }
 
 
-        public async Task<string> UpdateHorario(UpdateHorarioDTO dto)
+        public async Task<string> UpdateHorario(UpdateHorarioTurnoDTO dto)
         {
             _v.MayorDe0(dto.idTurnoMod);
             _v.SoloNumeros(dto.idTurnoMod);
-            var turno = await _v.IdRegistrado(dto.idTurnoMod);
+            var turnoMod = await _v.IdRegistrado(dto.idTurnoMod);
 
             if (dto.Horario == null)
             {
@@ -185,72 +189,79 @@ namespace Models.Managers
 
             var formatoHr = ConvertirStringEnTimeSpan(dto.Horario);
             EsHorarioPasado(formatoHr);
-            TurnoRegistrado(formatoHr, turno.Fecha, turno.Cancha);
-            
-            // Modificar fecha
-            turno.Horario = formatoHr;
+            TurnoRegistrado(formatoHr, turnoMod.Fecha, turnoMod.Cancha);
 
-            _context.Turnos.Update(turno);
+            // Modificar fecha
+            turnoMod.Horario = formatoHr;
+
+            _context.Turnos.Update(turnoMod);
             await _context.SaveChangesAsync();
 
             return $"Turno actualizado con exito";
         }
 
 
-        
-
-        public string UpdateCliente(int turnoID, int dniCliente)
+        public async Task<string> UpdateCliente(UpdateClienteTurnoDTO dto)
         {
-            if (dniCliente == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
+            _v.MayorDe0(dto.idClienteNew); _v.MayorDe0(dto.idTurnoMod);
+            _v.SoloNumeros(dto.idClienteNew); _v.SoloNumeros(dto.idTurnoMod);
 
-            var turnoExist = Buscar(turnoID);
-            var cliente = ClienteMG.Instancia.Buscar(dniCliente);
+            var turnoMod = await _v.IdRegistrado(dto.idTurnoMod);
 
+            var clienteNew = await _clienteManager.GetByIdAsync(dto.idClienteNew);
 
-            if (ClienteTieneMismaFechaAndHorario(turnoExist, cliente) == true)
-            {
-                throw new Exception("El cliente que quieres cambiar ya tiene un turno registrado para el mismo dia y horario.");
-            }
+            ClienteConMismaFechaTurno(turnoMod, clienteNew);
 
+            // Modificar cliente
+            turnoMod.Cliente = clienteNew;
 
+            _context.Turnos.Update(turnoMod);
+            await _context.SaveChangesAsync();
+
+            return $"Modificacion realizada con exito";
+
+        }
+
+        public async Task<string> UpdateCancha(UpdateCanchaDTO dto)
+        {
+            _v.MayorDe0(dto.idCanchaNew); _v.MayorDe0(dto.idTurnoMod);
+            _v.SoloNumeros(dto.idCanchaNew); _v.SoloNumeros(dto.idTurnoMod);
+
+            var turnoMod = await _v.IdRegistrado(dto.idTurnoMod);
+            var canchaNew = await _canchaManager.GetByIdAsync(dto.idCanchaNew);
+
+            CanchaConMismaFechaTurno(turnoMod, canchaNew);
+           
             // Modificar fecha
-            turnoExist.Cliente = cliente;
+            turnoMod.Cancha = canchaNew;
 
-            _context.Turnos.Update(turnoExist);
-            _context.SaveChanges();
+            _context.Turnos.Update(turnoMod);
+            await _context.SaveChangesAsync();
 
             return $"Modificacion realizada con exito";
         }
 
-        public string UpdateCancha(int turnoID, string nombreCancha)
+
+        public async Task<IEnumerable<Turno>> TurnosSemana(DateTime fecha)
         {
-            if (nombreCancha == null)
-            {
-                throw new Exception("Todos los campos deben estar completos.");
-            }
+            // Calcular el inicio de la semana (lunes)
+            DateTime inicioSemana = fecha.AddDays(-(int)fecha.DayOfWeek + 1); // -(int)fecha.DayOfWeek nos dac cuantos dias debemos restar para llegar al domingo
+                                                                              // +1 para byscar el lunes
 
-            var turnoExist = Buscar(turnoID);
-            var cancha = CanchaMG.Instancia.Buscar(nombreCancha);
+            // Calcular el final de la semana (domingo)
+            DateTime finSemana = inicioSemana.AddDays(6);
 
-            if (CanchaTieneMismaFechaAndHorario(turnoExist, cancha) == true)
-            {
-                throw new Exception("La cancha que quieres cambiar ya tiene un turno registrado para el mismo dia y horario.");
-            }
+            // Filtrar los turnos que están en ese rango
+            var turnosDeLaSemana =  _context.Turnos.Where(t => t.Fecha >= inicioSemana && t.Fecha <= finSemana).ToList();
 
-            // Modificar fecha
-            turnoExist.Cancha = cancha;
+            return turnosDeLaSemana;
 
-            _context.Turnos.Update(turnoExist);
-            _context.SaveChanges();
-
-            return $"Modificacion realizada con exito";
         }
 
-       
-
+        public async Task<decimal> ResultadoEconomicoMes(DateTime fechaDelDia)
+        {
+            var turnosDelMes
+        }
 
         public decimal ResultadoEconomicoDelMes(DateTime fechaDelDia)
         {

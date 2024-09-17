@@ -8879,19 +8879,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Pol\\.nuget\\packages\\": {}
+    "C:\\Users\\tinch\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Pol\\Documents\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj",
+      "projectUniqueName": "C:\\Users\\tinch\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj",
       "projectName": "Models",
-      "projectPath": "C:\\Users\\Pol\\Documents\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj",
-      "packagesPath": "C:\\Users\\Pol\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Pol\\Documents\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\obj\\",
+      "projectPath": "C:\\Users\\tinch\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\Models.csproj",
+      "packagesPath": "C:\\Users\\tinch\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\tinch\\OneDrive\\Documentos\\GitHub\\ProyectoTurnos2024\\GestionDeTurnos\\Models\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Pol\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\tinch\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8970,7 +8970,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
