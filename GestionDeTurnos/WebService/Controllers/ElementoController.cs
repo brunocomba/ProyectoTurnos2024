@@ -34,6 +34,22 @@ namespace WebService.Controllers
         }
 
 
+        [HttpGet("filtrar")]
+        public async Task<ActionResult<IEnumerable<Administrador>>> Filtrar(string data)
+        {
+            IEnumerable<Elemento> response;
+            try
+            {
+                response = await _elementoManager.Filtrar(data);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex.Message);
+            }
+            return Ok(response);
+        }
+
+
         [HttpGet("buscar{id}")]
         public async Task<ActionResult<IEnumerable<Elemento>>> Buscar(int id)
         {
@@ -50,6 +66,21 @@ namespace WebService.Controllers
 
         }
 
+        [HttpGet("buscarPorNombre")]
+        public async Task<ActionResult<IEnumerable<Elemento>>> BuscarPorNombre(string name)
+        {
+            Elemento response;
+            try
+            {
+                response = await _elementoManager.BuscarPorNombre(name, "");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(response);
+
+        }
 
         [HttpPost("add")]
         public async Task<ActionResult<Elemento>> Add(AltaElementoDTO dto)

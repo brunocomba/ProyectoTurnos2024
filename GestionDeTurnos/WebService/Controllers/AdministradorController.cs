@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models.Clases;
 using Models.DTOs.Administrador;
-using Models.DTOs.Filter;
 
 /// Aceceder a las DTOs de Administradores
 using Models.Managers;
@@ -36,6 +35,22 @@ namespace WebService.Controllers
         }
 
 
+        [HttpGet("filtrar")]
+        public async Task<ActionResult<IEnumerable<Administrador>>> Filtrar(string data)
+        {
+            IEnumerable<Administrador> response;
+            try
+            {
+                response = await _administradorManager.Filtrar(data);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex.Message);
+            }
+            return Ok(response);
+        }
+
+
         [HttpGet("buscar{id}")]
         public async Task<ActionResult<Administrador>> Buscar(int id)
         {
@@ -52,7 +67,7 @@ namespace WebService.Controllers
         }
 
 
-        [HttpGet ("buscarpordni")]
+        [HttpGet ("buscarPorDni{dni}")]
         public async Task<ActionResult<Administrador>> BuscarPorDni(int dni)
         {
             Administrador response;
@@ -68,13 +83,13 @@ namespace WebService.Controllers
         }
 
 
-        [HttpGet("filtrarPorNombreOApellido")]
-        public async Task<ActionResult<IEnumerable<Administrador>>> Filtrar(string data)
+        [HttpGet("buscarPorNomnbre")]
+        public async Task<ActionResult<Administrador>> BuscarPorNombre(string nombre, string apellido)
         {
-            IEnumerable<Administrador> response;
+            Administrador response;
             try
             {
-                response =  await _administradorManager.FiltrarPorNombreOApellido(data);
+                response = await _administradorManager.BuscarPorNombre(nombre, apellido);
             }
             catch (Exception ex)
             {
@@ -82,6 +97,8 @@ namespace WebService.Controllers
             }
             return Ok(response);
         }
+
+      
 
 
         [HttpPost("add")]
