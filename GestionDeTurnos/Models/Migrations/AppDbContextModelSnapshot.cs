@@ -34,11 +34,9 @@ namespace Models.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Apellido")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Calle")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Dni")
@@ -49,7 +47,6 @@ namespace Models.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
@@ -72,11 +69,10 @@ namespace Models.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DeporteId")
+                    b.Property<int?>("DeporteId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Precio")
@@ -101,7 +97,6 @@ namespace Models.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Apellido")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Calle")
@@ -112,7 +107,6 @@ namespace Models.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Telefono")
@@ -154,13 +148,13 @@ namespace Models.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CanchaId")
+                    b.Property<int?>("CanchaId")
                         .HasColumnType("int");
 
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
 
-                    b.Property<int>("ElementoId")
+                    b.Property<int?>("ElementoId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -180,13 +174,10 @@ namespace Models.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AdministradorId")
+                    b.Property<int?>("CanchaId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CanchaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClienteId")
+                    b.Property<int?>("ClienteId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Fecha")
@@ -196,8 +187,6 @@ namespace Models.Migrations
                         .HasColumnType("time");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AdministradorId");
 
                     b.HasIndex("CanchaId");
 
@@ -230,9 +219,7 @@ namespace Models.Migrations
                 {
                     b.HasOne("Models.Deporte", "Deporte")
                         .WithMany()
-                        .HasForeignKey("DeporteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DeporteId");
 
                     b.Navigation("Deporte");
                 });
@@ -241,15 +228,11 @@ namespace Models.Migrations
                 {
                     b.HasOne("Models.Clases.Cancha", "Cancha")
                         .WithMany()
-                        .HasForeignKey("CanchaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CanchaId");
 
                     b.HasOne("Models.Clases.Elemento", "Elemento")
                         .WithMany()
-                        .HasForeignKey("ElementoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ElementoId");
 
                     b.Navigation("Cancha");
 
@@ -258,25 +241,13 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Clases.Turno", b =>
                 {
-                    b.HasOne("Models.Clases.Administrador", "Administrador")
-                        .WithMany()
-                        .HasForeignKey("AdministradorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Models.Clases.Cancha", "Cancha")
                         .WithMany()
-                        .HasForeignKey("CanchaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CanchaId");
 
                     b.HasOne("Models.Clases.Cliente", "Cliente")
                         .WithMany()
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Administrador");
+                        .HasForeignKey("ClienteId");
 
                     b.Navigation("Cancha");
 
