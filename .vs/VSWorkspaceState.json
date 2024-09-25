@@ -4,10 +4,11 @@
     "\\clienteGestionDeTurnos",
     "\\GestionDeTurnos",
     "\\GestionDeTurnos\\Models",
+    "\\GestionDeTurnos\\Models\\Clases",
     "\\GestionDeTurnos\\Models\\Managers",
     "\\GestionDeTurnos\\WebService",
     "\\GestionDeTurnos\\WebService\\Controllers"
   ],
-  "SelectedNode": "\\GestionDeTurnos\\Models\\Managers\\CanchaMG.cs",
+  "SelectedNode": "\\GestionDeTurnos\\Models\\Clases\\Cliente.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models.ConnectionDB;
 
@@ -11,9 +12,11 @@ using Models.ConnectionDB;
 namespace Models.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240924231112_notNullsPropsTipoObj")]
+    partial class notNullsPropsTipoObj
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,9 +183,6 @@ namespace Models.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AdministradorId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CanchaId")
                         .HasColumnType("int");
 
@@ -196,8 +196,6 @@ namespace Models.Migrations
                         .HasColumnType("time");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AdministradorId");
 
                     b.HasIndex("CanchaId");
 
@@ -258,12 +256,6 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Clases.Turno", b =>
                 {
-                    b.HasOne("Models.Clases.Administrador", "Administrador")
-                        .WithMany()
-                        .HasForeignKey("AdministradorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Models.Clases.Cancha", "Cancha")
                         .WithMany()
                         .HasForeignKey("CanchaId")
@@ -275,8 +267,6 @@ namespace Models.Migrations
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Administrador");
 
                     b.Navigation("Cancha");
 
