@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Models.Clases;
+﻿using Models.Clases;
 using Models.ConnectionDB;
 using Models.DTOs.Cancha;
 
@@ -13,7 +12,6 @@ namespace Models.Managers
         {
             _deporteManager = deporteManager;
         }
-
 
         public async Task<string> AddAsync(AltaCanchaDTO dto)
         {
@@ -58,16 +56,11 @@ namespace Models.Managers
             _context.Canchas.Update(canchaMod);
             await _context.SaveChangesAsync();
 
-            return $"Cancha modificada con éxito";
+            return $"Cliente actualizado con éxito";
 
         }
 
-        public async Task<IEnumerable<Cancha>> get()
-        {
-            var list = await _context.Canchas.Include(c => c.Deporte).ToListAsync();
-            return list;
-        }
 
-        /// hacer con includessss!!!!
+
     }
 }

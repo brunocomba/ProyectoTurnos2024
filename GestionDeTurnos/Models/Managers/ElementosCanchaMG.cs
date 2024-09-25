@@ -19,17 +19,7 @@ namespace Models.Managers
         }
 
 
-        private bool StockSuficiente(int stock, int cantidad)
-        {
-            if (cantidad <= stock)
-            {
-                return true;
-            }
-
-            throw new Exception($"Error: No hay stock suficiente del elemento");
-        }
-
-        public async Task<ElementosCancha> BuscarAsignacion(string nombreCancha, string nombreElemento)
+        private async Task<ElementosCancha> Buscar(string nombreElemento, string nombreCancha)
         {
             if (nombreElemento == null || nombreCancha == null)
             {
@@ -47,6 +37,29 @@ namespace Models.Managers
         }
 
 
+        private bool ExisteAsignacion(string nombreCancha, string nombreElemento)
+        {
+            var busqueda = _context.ElementosCancha.FirstOrDefault(ec => ec.Elemento.Name == nombreElemento && ec.Cancha.Name == nombreCancha);
+
+            if (busqueda != null)
+            {
+                throw new Exception($"Error: Ya existe el elemento {nombreElemento} en la cancha {nombreCancha}.");
+            }
+            return false;
+        }
+
+
+        private bool StockSuficiente(int stock, int cantidad)
+        {
+            if (cantidad <= stock)
+            {
+                return true;
+            }
+
+            throw new Exception($"Error: No hay stock suficiente del elemento");
+        }
+
+
         public async Task<string> AddAsync(AltaAsignacionElementoDTO dto)
         {
 
@@ -56,7 +69,7 @@ namespace Models.Managers
             var cancha = await _canchaManager.GetByIdAsync(dto.idCancha);   
             var elemento = await _elementoManager.GetByIdAsync(dto.idCancha);
 
-            _v.ExisteAsignacion(cancha.Name, elemento.Name);
+            ExisteAsignacion(cancha.Name, elemento.Name);
             StockSuficiente(elemento.Stock, dto.Cantidad);
 
             ElementosCancha ec = new ElementosCancha();
@@ -65,11 +78,6 @@ namespace Models.Managers
             }
 
             await _context.ElementosCancha.AddAsync(ec);
-
-            // bajar el stock del elemento
-            elemento.Stock = elemento.Stock - dto.Cantidad;
-            _context.Elementos.Update(elemento);
-
             await _context.SaveChangesAsync();
 
             return $"{elemento.Name} asignado correctamente a la cancha {cancha.Name}";
@@ -85,16 +93,16 @@ namespace Models.Managers
             var cancha = await _canchaManager.GetByIdAsync(dto.idCancha);
             var elemento = await _elementoManager.GetByIdAsync(dto.idCancha);
 
-            _v.ExisteAsignacion(cancha.Name, elemento.Name);
+            ExisteAsignacion(cancha.Name, elemento.Name);
             StockSuficiente(elemento.Stock, dto.Cantidad);
 
-            var asig = await BuscarAsignacion(elemento.Name, cancha.Name);
+            var asig = await Buscar(elemento.Name, cancha.Name);
 
             // sumar cantidad
             asig.Cantidad = asig.Cantidad + dto.Cantidad;
             _context.ElementosCancha.Update(asig);
 
-            // bajar el stock
+            // bajar la cantidad en el stock
             elemento.Stock = elemento.Stock - dto.Cantidad;
             _context.Elementos.Update(elemento);
 
@@ -114,10 +122,10 @@ namespace Models.Managers
             var cancha = await _canchaManager.GetByIdAsync(dto.idCancha);
             var elemento = await _elementoManager.GetByIdAsync(dto.idCancha);
 
-            _v.ExisteAsignacion(cancha.Name, elemento.Name);
+            ExisteAsignacion(cancha.Name, elemento.Name);
             StockSuficiente(elemento.Stock, dto.Cantidad);
 
-            var asig = await BuscarAsignacion(elemento.Name, cancha.Name);
+            var asig = await Buscar(elemento.Name, cancha.Name);
 
             // sumar cantidad
             asig.Cantidad = asig.Cantidad - dto.Cantidad;

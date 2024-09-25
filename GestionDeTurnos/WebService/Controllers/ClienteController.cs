@@ -32,21 +32,6 @@ namespace WebService.Controllers
             return Ok(response);
         }
 
-        [HttpGet("filtrar")]
-        public async Task<ActionResult<IEnumerable<Administrador>>> Filtrar(string data)
-        {
-            IEnumerable<Cliente> response;
-            try
-            {
-                response = await _clienteManager.Filtrar(data);
-            }
-            catch (Exception ex)
-            {
-                return Conflict(ex.Message);
-            }
-            return Ok(response);
-        }
-
 
         [HttpGet("buscar{id}")]
         public async Task<ActionResult<IEnumerable<Cliente>>> Buscar(int id)
@@ -62,24 +47,6 @@ namespace WebService.Controllers
             }
             return Ok(response);
         }
-        
-
-
-        [HttpGet("buscarPorNombre")]
-        public async Task<ActionResult<IEnumerable<Cliente>>> BuscarPorNombre(string nombre, string apellido)
-        {
-            Cliente response;
-            try
-            {
-                response = await _clienteManager.BuscarPorNombre(nombre, apellido);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(response);
-        }
-
 
 
         [HttpPost("add")]

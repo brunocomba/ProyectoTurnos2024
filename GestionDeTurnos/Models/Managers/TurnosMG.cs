@@ -280,6 +280,6 @@ namespace Models.Managers
             return $"Resultado economico del mes de {fecha.ToString("MMMM")} -- ${resultado}";
         }
 
-        // HACER METODOS PARA OBTENER O FILTARAR POR DATOS ESPECIFICIOS. EJ. POR FECHA, POR CLIENTE , POR HORA POR CANCHA
+
     }
 }

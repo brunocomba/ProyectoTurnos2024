@@ -22,7 +22,7 @@ namespace WebService.Controllers
             IEnumerable<Cancha> response;
             try
             {
-                response = await _canchaManager.get();
+                response = await _canchaManager.GetAllAsync();
             }
             catch (Exception ex)
             {
@@ -30,22 +30,6 @@ namespace WebService.Controllers
             }
             return Ok(response);
 
-        }
-
-        [HttpGet("filtrar")]
-        public async Task<ActionResult<IEnumerable<Cancha>>> Filtrar(string data)
-        {
-            IEnumerable<Cancha> response;
-
-            try
-            {
-                response = await _canchaManager.Filtrar(data);
-            }
-            catch (Exception ex)
-            {
-                return Conflict(ex.Message);
-            }
-            return Ok(response);
         }
 
 
@@ -65,27 +49,6 @@ namespace WebService.Controllers
 
         }
 
-
-        [HttpGet("buscarPorNombre")]
-        public async Task<ActionResult<IEnumerable<Cancha>>> BuscarPorNombre(string nombre)
-        {
-            Cancha response;
-            try
-            {
-                response = await _canchaManager.BuscarPorNombre(nombre, "");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(response);
-
-        }
-
-
-       
-       
-
         [HttpPost("add")]
         public async Task<ActionResult<Cancha>> Add(AltaCanchaDTO dto)
         {
@@ -101,7 +64,6 @@ namespace WebService.Controllers
             return Ok(response);
         }
 
-
         [HttpPut("update")]
         public async Task<ActionResult<Cancha>> Update(UpdateCanchaDTO dto)
         {
@@ -116,7 +78,6 @@ namespace WebService.Controllers
             }
             return Ok(response);
         }
-        
 
         [HttpDelete("delete{id}")]
         public async Task<ActionResult<Cancha>> Delete(int id)

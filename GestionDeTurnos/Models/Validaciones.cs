@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Models.Clases;
 using Models.ConnectionDB;
 using Models.Interfaces;
 using System.Net;
 using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Models
 {
@@ -341,19 +341,7 @@ namespace Models
         }
 
 
-        public bool ExisteAsignacion(string nombreCancha, string nombreElemento)
-        {
 
-            var busqueda = _context.ElementosCancha.FirstOrDefault(ec => ec.Elemento.Name == nombreElemento && ec.Cancha.Name == nombreCancha);
-
-            if (busqueda != null)
-            {
-                throw new Exception($"Error: Ya existe el elemento {nombreElemento} en la cancha {nombreCancha}.");
-            }
-            return false;
-        }
-
-
-       
+      
     }
 }

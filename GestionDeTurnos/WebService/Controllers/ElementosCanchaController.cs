@@ -17,40 +17,6 @@ namespace WebService.Controllers
         }
 
 
-        [HttpGet("listado")]
-        public async Task<ActionResult<IEnumerable<ElementosCancha>>> Listado()
-        {
-            IEnumerable<ElementosCancha> response;
-            try
-            {
-                response = await _elementosCanchaManager.GetAllAsync();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(response);
-
-        }
-
-
-        [HttpGet("buscar")]
-        public async Task<ActionResult<IEnumerable<ElementosCancha>>> Buscar(string nombreCancha, string nombreElemento)
-        {
-            ElementosCancha response;
-            try
-            {
-                response = await _elementosCanchaManager.BuscarAsignacion(nombreElemento, nombreCancha);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            return Ok(response);
-
-        }
-
-
         [HttpPost("add")]
         public async Task<ActionResult<ElementosCancha>> Add(AltaAsignacionElementoDTO dto)
         {
@@ -115,5 +81,37 @@ namespace WebService.Controllers
         }
 
 
+        [HttpGet("listado")]
+        public async Task<ActionResult<IEnumerable<ElementosCancha>>> Listado()
+        {
+            IEnumerable<ElementosCancha> response;
+            try
+            {
+                response = await _elementosCanchaManager.GetAllAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(response);
+
+        }
+
+
+        [HttpGet("buscar")]
+        public async Task<ActionResult<IEnumerable<ElementosCancha>>> Buscar(string nombreElemento, string nombreCancha)
+        {
+            ElementosCancha response;
+            try
+            {
+                response = await _elementosCanchaManager.FiltrarPorNombreOApellido(id)
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(response);
+
+        }
     }
 }
